@@ -1,14 +1,36 @@
 services:
-  stats-server:
+  stat-service:
+    image: service:latest
+    build: stat-service/service
+    restart: "no"
     ports:
       - "9090:9090"
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:9090/actuator/health || exit 1
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    depends_on:
+      - stat-service-db
 
-  stats-db:
+  stat-service-db:
     image: postgres:16.1
-
-  ewm-service:
+    restart: on-failure
     ports:
-      - "8080:8080"
+      - "5432:5432"
+    volumes:
+      - stat-service-db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stat-service-db
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+volumes:
+  stat-service-db_data:
 
-  ewm-db:
-    image: postgres:16.1
