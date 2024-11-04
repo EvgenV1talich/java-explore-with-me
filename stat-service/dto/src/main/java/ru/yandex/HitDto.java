@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.time.LocalDateTime;
 
 /**
@@ -24,7 +23,7 @@ public class HitDto implements Serializable {
     Integer id;
     String app;
     String uri;
-    InetAddress ip;
+    String ip;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime timestamp;
 }

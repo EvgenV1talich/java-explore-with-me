@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.net.InetAddress;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class Hit {
     @Column(name = "uri")
     private String uri;
     @Column(name = "ip")
-    private InetAddress ip;
+    private String ip;
     @Column(name = "created")
     private LocalDateTime timestamp;
 

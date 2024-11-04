@@ -1,17 +1,18 @@
 package ru.yandex.hit.service;
 
 import ru.yandex.HitDto;
+import ru.yandex.StatDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HitService {
 
-    HitDto create(HitDto dto);
+    HitDto create(HitDto dto, String IP);
 
-    List<HitDto> getSomeByParams(LocalDateTime start,
-                                 LocalDateTime end,
-                                 List<String> uris,
-                                 Boolean unique);
+    List<StatDto> getStatByParams(LocalDateTime start,
+                                  LocalDateTime end,
+                                  List<String> uris,
+                                  Boolean unique);
 
 }

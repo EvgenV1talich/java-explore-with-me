@@ -2,6 +2,7 @@ package ru.yandex.hit.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.HitDto;
+import ru.yandex.StatDto;
 import ru.yandex.hit.model.Hit;
 
 @Component
@@ -27,7 +28,20 @@ public class HitMapper {
         Hit hit = new Hit();
         hit.setApp(dto.getApp());
         hit.setUri(dto.getUri());
+        hit.setIp(dto.getIp());
         hit.setTimestamp(dto.getTimestamp());
         return hit;
+    }
+
+    public StatDto toStat(Hit hit, Integer hits) {
+        if (hit == null) {
+            return null;
+        }
+        StatDto stat = new StatDto();
+        stat.setApp(hit.getApp());
+        stat.setUri(hit.getUri());
+        //TODO fix
+        stat.setHits(1);
+        return stat;
     }
 }
