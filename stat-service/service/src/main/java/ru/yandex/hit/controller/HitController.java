@@ -2,6 +2,7 @@ package ru.yandex.hit.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,16 +24,16 @@ public class HitController {
     @PostMapping("/hit")
     public HitDto createHit(@RequestBody HitDto dto) {
         log.info("Received /POST request to HitController...");
-        return null;
+        return service.create(dto);
     }
 
     @GetMapping("/stats")
-    public List<HitDto> getHitsByParams(@RequestParam LocalDateTime start,
-                                        @RequestParam LocalDateTime end,
+    public List<HitDto> getHitsByParams(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                         @RequestParam(required = false) List<String> uris,
                                         @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Received /GET request to HitController...");
-        return null;
+        return service.getSomeByParams(start, end, uris, unique);
     }
 
 }
