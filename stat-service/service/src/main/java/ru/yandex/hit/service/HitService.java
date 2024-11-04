@@ -1,6 +1,6 @@
 package ru.yandex.hit.service;
 
-import ru.yandex.hit.dto.HitDto;
+import ru.yandex.HitDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

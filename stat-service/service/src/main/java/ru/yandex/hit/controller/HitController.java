@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.hit.dto.HitDto;
+import ru.yandex.HitDto;
 import ru.yandex.hit.service.HitService;
 
 import java.time.LocalDateTime;

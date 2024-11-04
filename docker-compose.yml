@@ -16,7 +16,7 @@ services:
 
   stat-service-db:
     image: postgres:16.1
-    restart: on-failure
+    restart: no
     ports:
       - "5432:5432"
     volumes:

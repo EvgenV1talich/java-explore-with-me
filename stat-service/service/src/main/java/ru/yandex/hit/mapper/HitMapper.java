@@ -1,8 +1,8 @@
 package ru.yandex.hit.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.hit.dto.HitDto;
 import ru.yandex.hit.model.Hit;
+import ru.yandex.HitDto;
 
 @Component
 public class HitMapper {
@@ -12,6 +12,8 @@ public class HitMapper {
             return null;
         }
         HitDto dto = new HitDto();
+        dto.setId(hit.getId());
+        dto.setIp(hit.getIp());
         dto.setApp(hit.getApp());
         dto.setUri(hit.getUri());
         dto.setTimestamp(hit.getTimestamp());

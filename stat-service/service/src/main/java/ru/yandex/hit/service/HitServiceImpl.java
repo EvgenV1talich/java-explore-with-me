@@ -2,7 +2,7 @@ package ru.yandex.hit.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.hit.dto.HitDto;
+import ru.yandex.HitDto;
 import ru.yandex.hit.mapper.HitMapper;
 import ru.yandex.hit.repository.HitRepository;
 
