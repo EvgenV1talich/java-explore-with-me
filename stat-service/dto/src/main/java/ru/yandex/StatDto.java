@@ -12,6 +12,6 @@ public class StatDto {
 
     private String app;
     private String uri;
-    private Integer hits;
+    private Long hits;
 
 }

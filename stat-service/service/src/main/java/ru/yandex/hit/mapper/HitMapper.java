@@ -33,7 +33,7 @@ public class HitMapper {
         return hit;
     }
 
-    public StatDto toStat(Hit hit, Integer hits) {
+    public StatDto toStat(Hit hit, Long hits) {
         if (hit == null) {
             return null;
         }
@@ -41,7 +41,7 @@ public class HitMapper {
         stat.setApp(hit.getApp());
         stat.setUri(hit.getUri());
         //TODO fix
-        stat.setHits(1);
+        stat.setHits(hits);
         return stat;
     }
 }
