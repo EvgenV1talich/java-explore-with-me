@@ -18,8 +18,8 @@ public class HitServiceImpl implements HitService {
     private final HitMapper mapper;
 
     @Override
-    public HitDto create(HitDto dto, String IP) {
-        dto.setIp(IP);
+    public HitDto create(HitDto dto, String ip) {
+        dto.setIp(ip);
         return mapper.toDto(repository.save(mapper.toHit(dto)));
     }
 

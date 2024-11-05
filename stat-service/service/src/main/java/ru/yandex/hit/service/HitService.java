@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface HitService {
 
-    HitDto create(HitDto dto, String IP);
+    HitDto create(HitDto dto, String ip);
 
     List<StatDto> getStatByParams(LocalDateTime start,
                                   LocalDateTime end,
