@@ -31,6 +31,32 @@ services:
       timeout: 5s
       start_period: 10s
       retries: 5
+  main-service:
+    image: main-service:latest
+    build: main-service
+    restart: "no"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - main-db
+  main-db:
+    image: postgres:16.1
+    restart: "no"
+    ports:
+      - "5433:5432"
+    volumes:
+      - main-db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mainservice
+      POSTGRES_DB: main-service-db
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 volumes:
   stat-service-db_data:
+  main-db_data:
 
