@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ru.yandex.ServiceApp</mainClass>
+                            <mainClass>ru.yandex.StatServiceApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
