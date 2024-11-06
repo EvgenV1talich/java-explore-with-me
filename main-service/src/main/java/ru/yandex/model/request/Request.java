@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.util.ProxyUtils;
 import ru.yandex.model.event.Event;
+import ru.yandex.model.event.EventStatus;
 import ru.yandex.model.user.User;
 
 import java.time.LocalDateTime;
@@ -40,9 +41,8 @@ public class Request {
     private User requester;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
-    //TODO enum or string??
     @Column(name = "status")
-    private String status;
+    private EventStatus status;
 
     @Override
     public final boolean equals(Object o) {
