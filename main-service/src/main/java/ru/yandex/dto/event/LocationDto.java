@@ -1,4 +1,4 @@
-package ru.yandex.dto;
+package ru.yandex.dto.event;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

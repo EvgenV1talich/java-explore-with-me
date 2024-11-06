@@ -3,7 +3,7 @@ package ru.yandex.dto.compilation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.dto.EventShortDto;
+import ru.yandex.dto.event.EventShortDto;
 
 import java.util.List;
 

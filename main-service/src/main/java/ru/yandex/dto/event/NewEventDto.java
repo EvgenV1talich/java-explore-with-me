@@ -1,4 +1,4 @@
-package ru.yandex.dto;
+package ru.yandex.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;

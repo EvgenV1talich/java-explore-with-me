@@ -1,8 +1,8 @@
 package ru.yandex.mapper;
 
-import ru.yandex.dto.NewUserRequest;
-import ru.yandex.dto.UserDto;
-import ru.yandex.dto.UserShortDto;
+import ru.yandex.dto.user.NewUserRequest;
+import ru.yandex.dto.user.UserDto;
+import ru.yandex.dto.user.UserShortDto;
 import ru.yandex.model.user.User;
 
 public class UserMapper {

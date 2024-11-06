@@ -1,4 +1,4 @@
-package ru.yandex.dto;
+package ru.yandex.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
