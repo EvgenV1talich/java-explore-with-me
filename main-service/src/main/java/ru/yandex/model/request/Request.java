@@ -43,6 +43,7 @@ public class Request {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
     //TODO enum or string??
+    @Column(name = "status")
     private String status;
 
     @Override
