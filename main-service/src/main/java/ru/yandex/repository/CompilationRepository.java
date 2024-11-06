@@ -1,4 +1,7 @@
 package ru.yandex.repository;
 
-public interface CompilationRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import ru.yandex.model.compilation.Compilation;
+
+public interface CompilationRepository extends JpaRepository<Compilation, Integer> {
 }

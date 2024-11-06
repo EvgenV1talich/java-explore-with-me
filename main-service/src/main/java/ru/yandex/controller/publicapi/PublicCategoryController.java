@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.dto.CategoryDto;
+import ru.yandex.dto.category.CategoryDto;
 import ru.yandex.mapper.CategoryMapper;
 import ru.yandex.model.category.Category;
 import ru.yandex.service.publicapi.category.PublicCategoryService;

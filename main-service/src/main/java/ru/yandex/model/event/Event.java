@@ -55,11 +55,11 @@ public class Event {
     @Column(name = "participant_limit")
     private Integer participantLimit;
     @Column(name = "published_on")
-    private String publishedOn;
+    private LocalDateTime publishedOn;
     @Column(name = "request_moderation")
     private Boolean requestModeration;
     @Column(name = "state")
-    private String state;
+    private EventState state;
     @Column(name = "title")
     private String title;
     @Column(name = "views")

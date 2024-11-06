@@ -1,10 +1,9 @@
 package ru.yandex.mapper;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.yandex.dto.CategoryDto;
-import ru.yandex.dto.NewCategoryDto;
+import ru.yandex.dto.category.CategoryDto;
+import ru.yandex.dto.category.NewCategoryDto;
 import ru.yandex.model.category.Category;
 
 @Component

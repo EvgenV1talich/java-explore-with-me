@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import ru.yandex.dto.NewCategoryDto;
+import ru.yandex.dto.category.NewCategoryDto;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.mapper.CategoryMapper;

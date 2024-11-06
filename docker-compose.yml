@@ -31,6 +31,7 @@ services:
       timeout: 5s
       start_period: 10s
       retries: 5
+
   main-service:
     image: main-service:latest
     build: main-service
@@ -38,14 +39,15 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - main-db
-  main-db:
+      - main-service-db
+
+  main-service-db:
     image: postgres:16.1
     restart: "no"
     ports:
-      - "5433:5432"
+      - "6432:5432"
     volumes:
-      - main-db_data:/var/lib/postgresql/data
+      - main-service-db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mainservice
@@ -58,5 +60,5 @@ services:
       retries: 5
 volumes:
   stat-service-db_data:
-  main-db_data:
+  main-service-db_data:
 
