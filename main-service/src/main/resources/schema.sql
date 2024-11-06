@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS compilations_events (
     compilation_id INTEGER NOT NULL,
-    events_id       INTEGER NOT NULL,
+    events_id INTEGER NOT NULL,
     CONSTRAINT compilations_events_compilations_fk FOREIGN KEY (compilation_id) REFERENCES PUBLIC.compilations(id),
     CONSTRAINT compilations_events_events_fk FOREIGN KEY (events_id) REFERENCES PUBLIC.events(id)
 );
