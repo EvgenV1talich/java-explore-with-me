@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ApiError {
 
+    //TODO what type???
     private List<Object> errors;
     private String message;
     private String reason;
