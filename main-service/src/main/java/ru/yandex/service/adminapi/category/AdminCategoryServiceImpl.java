@@ -3,7 +3,9 @@ package ru.yandex.service.adminapi.category;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.yandex.dto.category.NewCategoryDto;
 import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
@@ -24,6 +26,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     @Override
     public Category addCategory(NewCategoryDto newCategoryDto) {
         Category category;
+        if (newCategoryDto.getName().length() > 50) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Category name is too long!");
+        }
 
         try {
             category = repository.save(mapper.toCategoryFromNewCategoryDto(newCategoryDto));

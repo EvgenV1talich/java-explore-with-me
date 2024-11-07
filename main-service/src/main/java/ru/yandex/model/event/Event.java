@@ -45,7 +45,7 @@ public class Event {
     @Column(name = "description")
     private String description;
     @Column(name = "event_date")
-    private LocalDateTime eventDate;
+    private LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "initiator_id")
     private User initiator;

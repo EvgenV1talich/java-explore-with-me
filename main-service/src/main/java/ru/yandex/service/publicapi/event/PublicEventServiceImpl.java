@@ -74,7 +74,7 @@ public class PublicEventServiceImpl implements PublicEventService {
 
         if (args.getSort() != null) {
             switch (args.getSort()) {
-                case "EVENT_DATE" -> events.sort(Comparator.comparing(Event::getEventDate));
+                case "EVENT_DATE" -> events.sort(Comparator.comparing(Event::getDate));
                 case "VIEWS" -> events.sort(Comparator.comparing(Event::getViews));
                 default -> events.sort(Comparator.comparing(Event::getId));
             }

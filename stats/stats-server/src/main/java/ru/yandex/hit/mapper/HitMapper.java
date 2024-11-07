@@ -40,7 +40,6 @@ public class HitMapper {
         StatDto stat = new StatDto();
         stat.setApp(hit.getApp());
         stat.setUri(hit.getUri());
-        //TODO fix
         stat.setHits(hits);
         return stat;
     }
