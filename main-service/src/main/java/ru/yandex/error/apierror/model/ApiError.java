@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +12,6 @@ import java.util.List;
 public class ApiError {
 
     //TODO what type???
-    private List<Object> errors;
     private String message;
     private String reason;
     //FIXME string or enum???
