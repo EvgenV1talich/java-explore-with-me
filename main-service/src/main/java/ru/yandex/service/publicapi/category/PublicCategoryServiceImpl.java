@@ -15,6 +15,7 @@ import java.util.List;
 public class PublicCategoryServiceImpl implements PublicCategoryService {
 
     private final CategoryRepository repository;
+
     @Override
     public List<Category> getCategories() {
         return repository.findAll();
