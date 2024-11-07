@@ -31,7 +31,6 @@ public class AdminCompilationController {
     public ResponseEntity<CompilationDto> postCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
 
         log.info("Received /POST request to AdminCompilationController...");
-
         return new ResponseEntity<>(compilationMapper.toCompilationDto(service.postCompilation(newCompilationDto)), HttpStatus.CREATED);
     }
 
@@ -39,9 +38,7 @@ public class AdminCompilationController {
     public ResponseEntity<Void> deleteCompilation(@PathVariable int compId) {
 
         log.info("Received /DELETE request to AdminCompilationController...");
-
         service.deleteCompilation(compId);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -51,7 +48,6 @@ public class AdminCompilationController {
                                                                         updateCompilationRequest) {
 
         log.info("Received /PATCH request to AdminCompilationController...");
-
         return new ResponseEntity<>(compilationMapper.toCompilationDto(service.updateCompilationById(compId, updateCompilationRequest)),
                 HttpStatus.OK);
     }

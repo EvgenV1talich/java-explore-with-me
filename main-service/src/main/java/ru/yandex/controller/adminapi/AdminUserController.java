@@ -41,8 +41,7 @@ public class AdminUserController {
                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                   @RequestParam(defaultValue = "10") @Positive int size) {
 
-        log.info("---START GET USERS ENDPOINT---");
-
+        log.info("Received /GET request to AdminUserController...");
         return new ResponseEntity<>(pagedResponse(service.getUsers(ids), from, size), HttpStatus.OK);
     }
 
@@ -50,18 +49,15 @@ public class AdminUserController {
     public ResponseEntity<UserDto> postUser(@RequestBody @Valid NewUserRequest newUserRequest) {
 
 
-        log.info("---START POST USER ENDPOINT---");
-
+        log.info("Received /POST request to AdminUserController...");
         return new ResponseEntity<>(toUserDto(service.postUser(newUserRequest)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable int userId) {
 
-        log.info("---START DELETE USER BY ID ENDPOINT---");
-
+        log.info("Received /DELETE request to AdminUserController...");
         service.deleteUserById(userId);
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

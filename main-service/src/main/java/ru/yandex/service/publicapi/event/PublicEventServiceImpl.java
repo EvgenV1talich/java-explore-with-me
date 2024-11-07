@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ru.yandex.HitDto;
+import ru.yandex.StatsClient;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.model.event.Event;
 import ru.yandex.model.event.EventState;
 import ru.yandex.model.event.SearchEventsArgs;
 import ru.yandex.repository.EventRepository;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,7 +24,7 @@ import java.util.List;
 public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventRepository eventsRepository;
-    //private final StatisticsClient client;
+    private final StatsClient client;
 
     @Value("${ewm.service.name}")
     private String serviceName;
@@ -71,18 +74,13 @@ public class PublicEventServiceImpl implements PublicEventService {
 
         if (args.getSort() != null) {
             switch (args.getSort()) {
-                case "EVENT_DATE":
-                    events.sort(Comparator.comparing(Event::getEventDate));
-                    break;
-                case "VIEWS":
-                    events.sort(Comparator.comparing(Event::getViews));
-                    break;
-                default:
-                    events.sort(Comparator.comparing(Event::getId));
+                case "EVENT_DATE" -> events.sort(Comparator.comparing(Event::getEventDate));
+                case "VIEWS" -> events.sort(Comparator.comparing(Event::getViews));
+                default -> events.sort(Comparator.comparing(Event::getId));
             }
         }
 
-        log.info("Сформирован список запросов согласно спецификации");
+        log.info("Getting requests list...");
 
         saveHit(args.getRequest());
 
@@ -91,14 +89,14 @@ public class PublicEventServiceImpl implements PublicEventService {
 
     @Override
     public Event getEventById(int eventId, HttpServletRequest request) {
-        Event event = eventsRepository.findById(eventId).orElseThrow(()
+        Event event = eventsRepository.findById((long) eventId).orElseThrow(()
                 -> new NotFoundException("Event not found with id = " + eventId));
 
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Event with id=" + eventId + " is not published");
         }
 
-        log.info("Найдено событие с id=" + eventId);
+        log.info("Found Event id=" + eventId);
 
         saveHit(request);
 
@@ -108,16 +106,16 @@ public class PublicEventServiceImpl implements PublicEventService {
     }
 
     private void saveHit(HttpServletRequest request) {
-        /*HitDto dto = new HitDto(
+        HitDto dto = new HitDto(
                 null,
                 serviceName,
                 (request.getRequestURI()),
                 request.getRemoteAddr(),
                 LocalDateTime.now()
-        );*/
+        );
 
-        log.info("Клиент отправил эндпойнт на веб-сервис");
-        //client.postHit(dto);
+        log.info("+new hit to Stat server...");
+        client.postHit(dto);
     }
 
 }

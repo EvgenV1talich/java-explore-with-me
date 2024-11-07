@@ -18,7 +18,7 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
 
     @Override
     public List<Compilation> getCompilations(Boolean pinned) {
-        log.info("Сформирован список подборок с pinned= " + pinned);
+        log.info("Getting compilation list pinned= " + pinned);
 
         if (pinned != null) {
             return repository.findAllByPinned(pinned);
@@ -28,8 +28,8 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     }
 
     @Override
-    public Compilation getCompilationById(Integer compId) {
-        log.info("Поиск подборки с id=" + compId);
+    public Compilation getCompilationById(long compId) {
+        log.info("Searching Compilation id=" + compId);
 
         return repository.findById(compId).orElseThrow(() -> new NotFoundException("Compilation not found with id = " +
                 compId));

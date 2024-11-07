@@ -7,6 +7,7 @@ import ru.yandex.dto.event.EventFullDto;
 import ru.yandex.dto.event.EventShortDto;
 import ru.yandex.dto.event.LocationDto;
 import ru.yandex.dto.event.NewEventDto;
+import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.model.category.Category;
 import ru.yandex.model.event.Event;
 import ru.yandex.model.event.EventState;
@@ -117,7 +118,7 @@ public class EventMapper {
                                                String sort, HttpServletRequest request) {
 
         if (rangeEnd != null && rangeEnd.isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Event must be published");
+            throw new IncorrectParameterException("Event must be published");
         }
 
         return new SearchEventsArgs(

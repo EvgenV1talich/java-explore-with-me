@@ -45,8 +45,7 @@ public class PrivateEventController {
                                                                @RequestParam(defaultValue = "0") int from,
                                                                @RequestParam(defaultValue = "10") int size) {
 
-        log.info("---START GET EVENTS BY USER ENDPOINT---");
-
+        log.info("Received /GET request to PrivateEventController...");
         return new ResponseEntity<>(pagedResponse(service.getEventsByUser(userId), from, size), HttpStatus.OK);
     }
 
@@ -54,18 +53,15 @@ public class PrivateEventController {
     public ResponseEntity<EventFullDto> addEvent(@PathVariable int userId,
                                                  @RequestBody @Valid NewEventDto newEventDto) {
 
-        log.info("---START ADD EVENT ENDPOINT---");
-
+        log.info("Received /POST request to PrivateEventController...");
         EventFullDto eventFullDto = eventMapper.toEventFullDto(service.addEvent(userId, newEventDto));
-
         return new ResponseEntity<>(eventFullDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> getEventById(@PathVariable int userId, @PathVariable int eventId) {
 
-        log.info("---START GET EVENT BY ID ENDPOINT---");
-
+        log.info("Received /GET by id request to PrivateEventController...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(service.getEventById(userId, eventId)), HttpStatus.OK);
     }
 
@@ -74,8 +70,7 @@ public class PrivateEventController {
                                                         @PathVariable int eventId,
                                                         @RequestBody @Valid UpdateEventUserRequest updateEventUserRequest) {
 
-        log.info("---START UPDATE EVENT BY ID ENDPOINT---");
-
+        log.info("Received /UPDATE request to PrivateEventController...");
         return new ResponseEntity<>(eventMapper.toEventFullDto(service.updateEventById(userId, eventId,
                 updateEventUserRequest)), HttpStatus.OK);
     }
@@ -84,8 +79,7 @@ public class PrivateEventController {
     public ResponseEntity<List<ParticipationRequestDto>> getRequests(@PathVariable int userId,
                                                                      @PathVariable int eventId) {
 
-        log.info("---START GET REQUESTS ENDPOINT---");
-
+        log.info("Received /GET-requests request to PrivateEventController...");
         List<Request> requests = service.getRequests(userId, eventId);
         List<ParticipationRequestDto> participationRequestsDto = new ArrayList<>();
 
@@ -102,8 +96,7 @@ public class PrivateEventController {
                                                                          @RequestBody EventRequestStatusUpdateRequest
                                                                                  eventRequestStatusUpdateRequest) {
 
-        log.info("---START UPDATE REQUESTS ENDPOINT---");
-
+        log.info("Received /PATCH-requests request to PrivateEventController...");
         return new ResponseEntity<>(service.updateRequests(userId, eventId, eventRequestStatusUpdateRequest),
                 HttpStatus.OK);
     }

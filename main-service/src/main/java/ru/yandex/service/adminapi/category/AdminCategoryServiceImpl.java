@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.yandex.dto.category.NewCategoryDto;
+import ru.yandex.error.apierror.exceptions.ConflictException;
+import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.mapper.CategoryMapper;
@@ -27,7 +29,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         try {
             category = repository.save(mapper.toCategoryFromNewCategoryDto(newCategoryDto));
         } catch (DataIntegrityViolationException e) {
-            throw new SaveException("Failed to save category in adminCategoryService");
+            throw new ConflictException("Failed to save category in adminCategoryService");
         }
 
         log.info("Added category - " + category.getName());
@@ -40,7 +42,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         Category category = repository.findById(catId).orElseThrow();
 
         if (eventRepository.existsByCategory(category)) {
-            throw new SaveException("Category already exists");
+            throw new ConflictException("Category already exists");
         } else {
             repository.deleteById(catId);
         }
@@ -54,14 +56,14 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
                 -> new NotFoundException("Category with id=" + catId + " was not found"));
 
         if (newCategoryDto.getName().length() > 50) {
-            throw new IllegalArgumentException("Field to long (more than 50 symbols)");
+            throw new IncorrectParameterException("Field too long (more than 50 symbols)");
         }
 
         try {
             category.setName(newCategoryDto.getName());
             repository.save(category);
         } catch (DataIntegrityViolationException e) {
-            throw new SaveException("Failed to save category in adminCategoryService");
+            throw new ConflictException("Failed to save category in adminCategoryService");
         }
 
         log.info("Changed name " + category.getId() + " to " + category.getName());

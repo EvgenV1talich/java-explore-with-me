@@ -46,10 +46,8 @@ public class AdminEventController {
                                                      @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
 
-        log.info("---START GET EVENTS ENDPOINT---");
-
+        log.info("Received /GET request to AdminEventController...");
         SearchPublicEventsArgs args = mapper.toSearchPublicEventsArgs(users, states, categories, rangeStart, rangeEnd);
-
         return new ResponseEntity<>(pagedResponse(service.getEvents(args), from, size), HttpStatus.OK);
     }
 
@@ -58,8 +56,7 @@ public class AdminEventController {
                                                         @RequestBody @Valid UpdateEventAdminRequest
                                                                 updateEventAdminRequest) {
 
-        log.info("---START UPDATE EVENT BY ID ENDPOINT---");
-
+        log.info("Received /PATCH request to AdminEventController...");
         return new ResponseEntity<>(mapper.toEventFullDto(service.updateEventById(eventId, updateEventAdminRequest)),
                 HttpStatus.OK);
     }

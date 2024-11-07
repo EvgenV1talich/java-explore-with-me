@@ -49,18 +49,16 @@ public class PublicEventController {
                                                         @RequestParam(defaultValue = "10") @Positive Integer size,
                                                         HttpServletRequest request) {
 
-        log.info("---START GET EVENTS ENDPOINT---");
-
+        log.info("Received /GET request to PublicEventController...");
         SearchEventsArgs args = mapper.toSearchEventsArgs(rangeStart, rangeEnd, text, categories, paid, onlyAvailable, sort,
                 request);
-
         return new ResponseEntity<>(pagedResponse(service.getEvents(args), from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> getEventById(@PathVariable int eventId, HttpServletRequest request) {
 
-        log.info("---START GET EVENT BY ID ENDPOINT---");
+        log.info("Received /GET by id request to PublicEventController...");
 
         return new ResponseEntity<>(mapper.toEventFullDto(service.getEventById(eventId, request)), HttpStatus.OK);
     }

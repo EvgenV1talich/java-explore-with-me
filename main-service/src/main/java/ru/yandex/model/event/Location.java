@@ -25,7 +25,7 @@ import java.util.Objects;
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "lat")
     private Double lat;
     @Column(name = "lon")

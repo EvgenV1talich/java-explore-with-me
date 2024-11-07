@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.dto.compilation.NewCompilationDto;
 import ru.yandex.dto.compilation.UpdateCompilationRequest;
+import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.mapper.CompilationMapper;
@@ -39,13 +40,11 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         Compilation compilation = compilationMapper.toCompilationFromDto(newCompilationDto, events);
 
         try {
-            log.info("Добавлена новая подборка: " + compilation);
+            log.info("Added new compilation: " + compilation);
 
             return repository.save(compilation);
-        } catch (SaveException e) {
-            throw new SaveException("could not execute statement; SQL [n/a]; constraint [uq_compilation_name];"
-                    + " nested exception is org.hibernate.exception.ConstraintViolationException:"
-                    + " could not execute statement");
+        } catch (ConflictException e) {
+            throw new ConflictException("Something wrong when adding compilation in AdminCompilationServiceImpl postCompilation method");
         }
 
     }
@@ -54,12 +53,12 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     public void deleteCompilation(int compId) {
         log.info("Удалена подборка с id=" + compId);
 
-        repository.deleteById(compId);
+        repository.deleteById((long) compId);
     }
 
     @Override
     public Compilation updateCompilationById(int compId, UpdateCompilationRequest updateCompilationRequest) {
-        Compilation compilation = repository.findById(compId).orElseThrow(()
+        Compilation compilation = repository.findById((long) compId).orElseThrow(()
                 -> new NotFoundException("Compilation not found with id=" + compId));
 
         List<Event> events = new ArrayList<>();
@@ -81,7 +80,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
 
-        log.info("Обновлена с подборка id=" + compId);
+        log.info("Compilation id= " + compId + " was updated!");
 
         return repository.save(compilation);
     }

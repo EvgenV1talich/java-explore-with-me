@@ -9,8 +9,9 @@ import ru.yandex.dto.event.EventRequestStatusUpdateRequest;
 import ru.yandex.dto.event.EventRequestStatusUpdateResult;
 import ru.yandex.dto.event.NewEventDto;
 import ru.yandex.dto.event.UpdateEventUserRequest;
+import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
-import ru.yandex.error.apierror.exceptions.SaveException;
+import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.mapper.EventMapper;
 import ru.yandex.mapper.RequestMapper;
 import ru.yandex.model.category.Category;
@@ -47,7 +48,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
     @Override
     public List<Event> getEventsByUser(int userId) {
-        log.info("Сформирован список событий для пользователя с id= " + userId);
+        log.info("Getting events list for User id = " + userId);
 
         return eventRepository.findAllByInitiatorId(userId);
     }
@@ -75,19 +76,19 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         try {
             event = eventRepository.save(eventMapper.toEventFromNewEventDto(newEventDto, category, user, location));
         } catch (DataIntegrityViolationException e) {
-            throw new SaveException("Field: category. Error: must not be blank. Value: null");
+            throw new ConflictException("Field: category. Error: must not be blank. Value: null");
         }
 
-        log.info("Добавлено новое событие id=" + event.getId() + " для пользователя с id=" + userId);
+        log.info("Added new event id = " + event.getId() + " for User id = " + userId);
 
         return event;
     }
 
     @Override
     public Event getEventById(int userId, int eventId) {
-        log.info("Поиск события с id=" + eventId + " для пользователя с id=" + userId);
+        log.info("Search Event id=" + eventId + " for User id=" + userId);
 
-        Event event = eventRepository.findById(eventId).orElseThrow(()
+        Event event = eventRepository.findById((long) eventId).orElseThrow(()
                 -> new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId));
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId);
@@ -99,7 +100,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     public Event updateEventById(int userId, int eventId, UpdateEventUserRequest updateEventUserRequest) {
 
-        Event event = eventRepository.findById(eventId).orElseThrow(()
+        Event event = eventRepository.findById((long) eventId).orElseThrow(()
                 -> new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId));
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId);
@@ -111,7 +112,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             + "was not found")));
         }
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new SaveException("Event must not be published");
+            throw new ConflictException("Event must not be published");
         }
 
         if (updateEventUserRequest.getStateAction() != null) {
@@ -121,7 +122,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 event.setState(EventState.PENDING);
             }
         }
-        log.info("Обновлено событие с id=" + eventId + " для пользователя с id=" + userId);
+        log.info("Updating Event id=" + eventId + " for User id=" + userId);
 
         return event;
     }
@@ -142,7 +143,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
             throw new NotFoundException("Event not found with id=" + eventId + " and userId=" + userId);
         }
 
-        log.info("Сформирован список запросов к событию с id=" + eventId + " для пользователя с id=" + userId);
+        log.info("Getting requests list for Event id=" + eventId + " for User id=" + userId);
 
         return requests;
     }
@@ -151,7 +152,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     public EventRequestStatusUpdateResult updateRequests(int userId, int eventId,
                                                          EventRequestStatusUpdateRequest request) {
 
-        log.info("Обновление запросов для события с id=" + eventId + " для пользователя с id=" + userId);
+        log.info("Updating requests for Event id=" + eventId + " for User id=" + userId);
 
         String status = request.getStatus();
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
@@ -165,7 +166,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 boolean isConfirmedRequestExists = requests.stream()
                         .anyMatch(r -> r.getStatus().equals(CONFIRMED));
                 if (isConfirmedRequestExists) {
-                    throw new SaveException("Cannot reject confirmed requests");
+                    throw new ConflictException("Cannot reject confirmed requests");
                 }
                 rejectedRequests = requests.stream()
                         .peek(r -> r.setStatus(REJECTED))
@@ -175,7 +176,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
             }
         }
 
-        Event event = eventRepository.findById(eventId).orElseThrow(() ->
+        Event event = eventRepository.findById((long) eventId).orElseThrow(() ->
                 new NotFoundException("Event not found with id = " + eventId + " and userId " + userId));
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Event not found with id = " + eventId + " and userId " + userId);
@@ -191,7 +192,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         int potentialParticipants = requestIds.size();
 
         if (participantLimit > 0 && participantLimit.equals(approvedRequests)) {
-            throw new SaveException("Event with id=" + event.getId() + " has reached participant limit");
+            throw new ConflictException("Event with id=" + event.getId() + " has reached participant limit");
         }
 
         if (status.equals(CONFIRMED.toString())) {
@@ -201,7 +202,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(CONFIRMED)) {
                                 r.setStatus(CONFIRMED);
                             } else {
-                                throw new SaveException("Request with id=" + r.getId() + " has already been confirmed");
+                                throw new ConflictException("Request with id=" + r.getId() + " has already been confirmed");
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)
@@ -214,7 +215,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(CONFIRMED)) {
                                 r.setStatus(CONFIRMED);
                             } else {
-                                throw new SaveException("Request with id=" + r.getId() + " has already been confirmed");
+                                throw new ConflictException("Request with id=" + r.getId() + " has already been confirmed");
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)
@@ -225,7 +226,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(REJECTED)) {
                                 r.setStatus(REJECTED);
                             } else {
-                                throw new SaveException("Request with id=" + r.getId() + " has already been rejected");
+                                throw new ConflictException("Request with id=" + r.getId() + " has already been rejected");
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)

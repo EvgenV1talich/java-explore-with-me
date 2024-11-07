@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.model.event.Event;
 import ru.yandex.model.event.EventState;
 import ru.yandex.model.event.EventStateAction;
@@ -13,9 +14,9 @@ import ru.yandex.repository.EventRepository;
 
 import java.util.List;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class AdminEventServiceImpl implements AdminEventService {
 
     private final EventRepository eventRepository;
@@ -46,7 +47,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                     criteriaBuilder.lessThan(root.get("date"), searchPublicEventsArgs.getRangeEnd()));
         }
 
-        log.info("Сформирован список coбытий согласно спецификации");
+        log.info("Get events list...");
 
         return eventRepository.findAll(spec);
     }
@@ -54,7 +55,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     @Override
     public Event updateEventById(int eventId, UpdateEventAdminRequest updateEventAdminRequest) {
 
-        Event event = eventRepository.findById(eventId).orElseThrow();
+        Event event = eventRepository.findById((long) eventId).orElseThrow();
 
         if (updateEventAdminRequest.getAnnotation() != null) {
             event.setAnnotation(updateEventAdminRequest.getAnnotation());
@@ -72,9 +73,9 @@ public class AdminEventServiceImpl implements AdminEventService {
             event.setPaid(updateEventAdminRequest.getPaid());
         }
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new IllegalArgumentException("Cannot publish the event because it's not in the right state: PUBLISHED");
+            throw new ConflictException("Cannot publish the event because it's not in the right state: PUBLISHED");
         } else if (event.getState().equals(EventState.CANCELED)) {
-            throw new IllegalArgumentException("Cannot publish the event because it's not in the right state: CANCELED");
+            throw new ConflictException("Cannot publish the event because it's not in the right state: CANCELED");
         } else {
             if (updateEventAdminRequest.getStateAction() != null) {
                 if (updateEventAdminRequest.getStateAction().toString().equals(EventStateAction.PUBLISH_EVENT.toString())) {
@@ -85,7 +86,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                 }
             }
         }
-        log.info("Обновлено событие с id= " + eventId);
+        log.info("Event id= " + eventId + " was updated!");
 
         return eventRepository.save(event);
     }

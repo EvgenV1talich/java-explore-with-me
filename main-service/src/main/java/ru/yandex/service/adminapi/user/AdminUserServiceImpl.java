@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.yandex.dto.user.NewUserRequest;
+import ru.yandex.error.apierror.exceptions.ConflictException;
+import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.model.user.User;
 import ru.yandex.repository.UserRepository;
@@ -22,7 +24,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public List<User> getUsers(List<Long> ids) {
-        log.info("Сформирован список пользователей");
+        log.info("Getting users list...");
 
         if (ids == null) {
             return repository.findAll();
@@ -35,24 +37,20 @@ public class AdminUserServiceImpl implements AdminUserService {
     public User postUser(NewUserRequest newUserRequest) {
         User user;
         if (newUserRequest.getEmail().length() > 254) {
-            throw new IllegalArgumentException("Field: email. Error: must not be blank. Value: null");
+            throw new IncorrectParameterException("Field: email. Error: must not be blank. Value: null");
         }
         try {
             user = repository.save(toUser(newUserRequest));
         } catch (DataIntegrityViolationException e) {
-            throw new SaveException("could not execute statement; SQL [n/a]; constraint [uq_email]; "
-                    + "nested exception is org.hibernate.exception.ConstraintViolationException: "
-                    + "could not execute statement");
+            throw new ConflictException("Something wrong in AdminUserServiceImpl postUser method :(");
         }
-        log.info("Добавлен новый пользователь: " + user);
-
+        log.info("Added new user: " + user);
         return user;
     }
 
     @Override
     public void deleteUserById(int userId) {
-        log.info("Пользователь с id=" + userId + " удален");
-
+        log.info("User id=" + userId + " was deleted!");
         repository.deleteById((long) userId);
     }
 }

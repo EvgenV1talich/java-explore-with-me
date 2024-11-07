@@ -10,12 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiError {
-
-    //TODO what type???
-    private String message;
-    private String reason;
-    //FIXME string or enum???
     private String status;
-    private LocalDateTime timestamp;
-
+    private String reason;
+    private String message;
+    private String timestamp;
 }

@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StatisticsClient extends HttpClient {
+public class StatsClient extends HttpClient {
 
     @Autowired
-    public StatisticsClient(@Value("${service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

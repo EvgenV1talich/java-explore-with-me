@@ -2,6 +2,8 @@ package ru.yandex.model.request;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +34,7 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;
@@ -42,6 +44,7 @@ public class Request {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private EventStatus status;
 
     @Override

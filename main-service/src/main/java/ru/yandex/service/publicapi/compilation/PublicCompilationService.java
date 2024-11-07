@@ -8,6 +8,6 @@ public interface PublicCompilationService {
 
     List<Compilation> getCompilations(Boolean pinned);
 
-    Compilation getCompilationById(Integer compId);
+    Compilation getCompilationById(long compId);
 
 }

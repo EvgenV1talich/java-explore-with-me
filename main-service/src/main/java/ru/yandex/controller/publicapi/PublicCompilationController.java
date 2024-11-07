@@ -31,16 +31,14 @@ public class PublicCompilationController {
                                                                 @RequestParam(defaultValue = "0") int from,
                                                                 @RequestParam(defaultValue = "10") int size) {
 
-        log.info("---START GET COMPILATIONS ENDPOINT---");
-
+        log.info("Received /GET request to PublicCompilationController...");
         return new ResponseEntity<>(pagedResponse(service.getCompilations(pinned), from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{compId}")
     public ResponseEntity<CompilationDto> getCompilationById(@PathVariable int compId) {
 
-        log.info("---START GET COMPILATION BY ID ENDPOINT---");
-
+        log.info("Received /GET by id request to PublicCompilationController...");
         return new ResponseEntity<>(mapper.toCompilationDto(service.getCompilationById(compId)), HttpStatus.OK);
     }
 

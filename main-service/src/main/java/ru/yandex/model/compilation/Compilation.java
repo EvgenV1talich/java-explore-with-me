@@ -1,5 +1,6 @@
 package ru.yandex.model.compilation;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,9 @@ public class Compilation {
     private Integer id;
     @ElementCollection
     private List<Event> events;
+    @Column(name = "title")
     private String title;
+    @Column(name = "pinned")
     private Boolean pinned;
 
     @Override
