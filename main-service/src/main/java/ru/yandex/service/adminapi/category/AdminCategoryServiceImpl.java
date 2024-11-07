@@ -8,7 +8,6 @@ import ru.yandex.dto.category.NewCategoryDto;
 import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
-import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.mapper.CategoryMapper;
 import ru.yandex.model.category.Category;
 import ru.yandex.repository.CategoryRepository;

@@ -11,7 +11,6 @@ import ru.yandex.dto.event.NewEventDto;
 import ru.yandex.dto.event.UpdateEventUserRequest;
 import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
-import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.mapper.EventMapper;
 import ru.yandex.mapper.RequestMapper;
 import ru.yandex.model.category.Category;

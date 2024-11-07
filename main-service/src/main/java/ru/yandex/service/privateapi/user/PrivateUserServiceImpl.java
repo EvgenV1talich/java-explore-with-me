@@ -21,7 +21,7 @@ import static ru.yandex.mapper.RequestMapper.toRequest;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class PrivateUserServiceImpl implements PrivateUserService{
+public class PrivateUserServiceImpl implements PrivateUserService {
 
     private final RequestRepository repository;
     private final EventRepository eventsRepository;

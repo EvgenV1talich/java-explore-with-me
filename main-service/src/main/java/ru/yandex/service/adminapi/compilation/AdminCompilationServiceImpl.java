@@ -7,7 +7,6 @@ import ru.yandex.dto.compilation.NewCompilationDto;
 import ru.yandex.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
-import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.mapper.CompilationMapper;
 import ru.yandex.model.compilation.Compilation;
 import ru.yandex.model.event.Event;

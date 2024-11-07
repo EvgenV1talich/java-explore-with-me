@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.dto.user.NewUserRequest;
 import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
-import ru.yandex.error.apierror.exceptions.SaveException;
 import ru.yandex.model.user.User;
 import ru.yandex.repository.UserRepository;
 

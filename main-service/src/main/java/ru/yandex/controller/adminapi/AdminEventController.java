@@ -37,7 +37,7 @@ public class AdminEventController {
 
     @GetMapping
     public ResponseEntity<List<EventFullDto>> getAll(@RequestParam(required = false)
-                                                         LocalDateTime rangeStart,
+                                                     LocalDateTime rangeStart,
                                                      @RequestParam(required = false)
                                                      LocalDateTime rangeEnd,
                                                      @RequestParam(required = false) List<Long> users,

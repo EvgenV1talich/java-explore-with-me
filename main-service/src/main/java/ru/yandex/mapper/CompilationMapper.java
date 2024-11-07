@@ -16,7 +16,6 @@ public class CompilationMapper {
 
     private final EventMapper eventMapper;
 
-
     public CompilationDto toCompilationDto(Compilation compilation) {
         if (compilation == null) {
             return null;

@@ -15,6 +15,7 @@ import ru.yandex.model.event.Location;
 import ru.yandex.model.event.SearchEventsArgs;
 import ru.yandex.model.event.SearchPublicEventsArgs;
 import ru.yandex.model.user.User;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
