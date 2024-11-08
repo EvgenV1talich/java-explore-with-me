@@ -1,6 +1,7 @@
 package ru.yandex.service.publicapi.event;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import ru.yandex.model.event.EventState;
 import ru.yandex.model.event.SearchEventsArgs;
 import ru.yandex.repository.EventRepository;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -90,13 +92,16 @@ public class PublicEventServiceImpl implements PublicEventService {
     @Override
     public Event getEventById(int eventId, HttpServletRequest request) {
         Event event = eventsRepository.findById((long) eventId).orElseThrow(()
-                -> new NotFoundException("Event not found with id = " + eventId));
+                -> new NotFoundException(MessageFormat
+                .format("Event not found with id = {0}", eventId)));
 
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new NotFoundException("Event with id=" + eventId + " is not published");
+            throw new NotFoundException(MessageFormat
+                    .format("Event with id={0} is not published", eventId));
         }
 
-        log.info("Found Event id=" + eventId);
+        log.info(MessageFormat
+                .format("Found Event id={0}", eventId));
 
         saveHit(request);
 
@@ -105,6 +110,7 @@ public class PublicEventServiceImpl implements PublicEventService {
         return event;
     }
 
+    @Transactional
     private void saveHit(HttpServletRequest request) {
         HitDto dto = new HitDto(
                 null,

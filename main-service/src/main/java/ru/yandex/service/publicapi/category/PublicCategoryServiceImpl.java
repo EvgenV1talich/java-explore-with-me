@@ -7,6 +7,7 @@ import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.model.category.Category;
 import ru.yandex.repository.CategoryRepository;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Service
@@ -23,7 +24,7 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
 
     @Override
     public Category getCategoryById(Long categoryId) {
-        return repository.findById(categoryId).orElseThrow(() -> new NotFoundException("Category (id = " + categoryId
-                + ") was not found"));
+        return repository.findById(categoryId).orElseThrow(() -> new NotFoundException(MessageFormat
+                .format("Category (id = {0}) was not found", categoryId)));
     }
 }

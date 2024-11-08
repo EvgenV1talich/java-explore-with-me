@@ -7,6 +7,7 @@ import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.model.compilation.Compilation;
 import ru.yandex.repository.CompilationRepository;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Slf4j
@@ -18,7 +19,8 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
 
     @Override
     public List<Compilation> getCompilations(Boolean pinned) {
-        log.info("Getting compilation list pinned= " + pinned);
+        log.info(MessageFormat
+                .format("Getting compilation list pinned= {0}", pinned));
 
         if (pinned != null) {
             return repository.findAllByPinned(pinned);
@@ -28,11 +30,12 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
     }
 
     @Override
-    public Compilation getCompilationById(long compId) {
-        log.info("Searching Compilation id=" + compId);
+    public Compilation getCompilationById(long compilationId) {
+        log.info(MessageFormat
+                .format("Searching Compilation id={0}", compilationId));
 
-        return repository.findById(compId).orElseThrow(() -> new NotFoundException("Compilation not found with id = " +
-                compId));
+        return repository.findById(compilationId).orElseThrow(() -> new NotFoundException(MessageFormat
+                .format("Compilation not found with id = {0}", compilationId)));
     }
 
 }
