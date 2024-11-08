@@ -1,5 +1,6 @@
 package ru.yandex.service.adminapi.category;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +13,8 @@ import ru.yandex.model.category.Category;
 import ru.yandex.repository.CategoryRepository;
 import ru.yandex.repository.EventRepository;
 
+import java.text.MessageFormat;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,6 +24,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final CategoryMapper mapper;
 
     @Override
+    @Transactional
     public Category addCategory(NewCategoryDto newCategoryDto) {
         Category category;
         try {
@@ -29,12 +33,14 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             throw new ConflictException("Failed to save category in adminCategoryService");
         }
 
-        log.info("Added category - " + category.getName());
+        log.info(MessageFormat
+                .format("Added category - {0}", category.getName()));
 
         return category;
     }
 
     @Override
+    @Transactional
     public void deleteCategoryById(long categoryId) {
         Category category = repository.findById(categoryId).orElseThrow();
         if (eventRepository.existsByCategory(category)) {
@@ -43,13 +49,16 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             repository.deleteById(categoryId);
         }
 
-        log.info("Category (name = " + category.getName() + ") was deleted");
+        log.info(MessageFormat
+                .format("Category (name = {0}) was deleted", category.getName()));
     }
 
     @Override
+    @Transactional
     public Category updateCategoryById(long categoryId, NewCategoryDto newCategoryDto) {
         Category category = repository.findById(categoryId).orElseThrow(()
-                -> new NotFoundException("Category with id=" + categoryId + " was not found"));
+                -> new NotFoundException(MessageFormat
+                .format("Category with id={0} was not found", categoryId)));
 
         try {
             category.setName(newCategoryDto.getName());
@@ -58,7 +67,8 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             throw new ConflictException("Failed to save category in adminCategoryService");
         }
 
-        log.info("Changed name " + category.getId() + " to " + category.getName());
+        log.info(MessageFormat
+                .format("Changed name {0} to {1}", category.getId(), category.getName()));
 
         return category;
     }

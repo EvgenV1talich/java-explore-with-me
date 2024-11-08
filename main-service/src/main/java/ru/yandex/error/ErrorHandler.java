@@ -9,6 +9,7 @@ import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.error.apierror.model.ApiError;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -41,6 +42,18 @@ public class ErrorHandler {
         return new ApiError(
                 "CONFLICT",
                 "Entity with current params not found!",
+                e.getMessage(),
+                LocalDateTime.now().toString()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleSQLException(SQLException e) {
+
+        return new ApiError(
+                "CONFLICT",
+                "Something wrong in repository layer!\n" + e.getSQLState(),
                 e.getMessage(),
                 LocalDateTime.now().toString()
         );
