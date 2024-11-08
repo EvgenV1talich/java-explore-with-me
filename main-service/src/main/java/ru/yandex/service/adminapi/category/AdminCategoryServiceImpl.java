@@ -37,8 +37,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             throw new ConflictException(e.getMessage() + "\nFailed to save category in adminCategoryService");
         }
         //TODO check
-        log.info(MessageFormat
-                .format("Added category - {0}", category.getName()));
+        log.info(MessageFormat.format("Added category - {0}", category.getName()));
 
         return category;
     }
@@ -54,16 +53,15 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             repository.deleteById(categoryId);
         }
 
-        log.info(MessageFormat
-                .format("Category (name = {0}) was deleted", category.getName()));
+        log.info(MessageFormat.format("Category (name = {0}) was deleted", category.getName()));
     }
 
     @Override
     @Transactional
     public Category updateCategoryById(long categoryId, NewCategoryDto newCategoryDto) {
         Category category = repository.findById(categoryId).orElseThrow(()
-                -> new NotFoundException(MessageFormat
-                .format("Category with id='{}'{0} was not found", categoryId)));
+                -> new NotFoundException(MessageFormat.
+                format("Category with id='{}'{0} was not found", categoryId)));
         //FIXME
         /*if (newCategoryDto.getName().length() > 50) {
             throw new IncorrectParameterException("Field too long (more than 50 symbols)");
@@ -76,8 +74,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             throw new ConflictException("Failed to save category in adminCategoryService");
         }
 
-        log.info(MessageFormat
-                .format("Changed name {0} to {1}", category.getId(), category.getName()));
+        log.info(MessageFormat.format("Changed name {0} to {1}", category.getId(), category.getName()));
 
         return category;
     }
