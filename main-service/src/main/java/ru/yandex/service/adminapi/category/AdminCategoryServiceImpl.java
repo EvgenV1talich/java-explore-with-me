@@ -45,10 +45,8 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         Category category = repository.findById(categoryId).orElseThrow();
         if (eventRepository.existsByCategory(category)) {
             throw new ConflictException("Category already exists");
-        } else {
-            repository.deleteById(categoryId);
         }
-
+        repository.deleteById(categoryId);
         log.info(MessageFormat
                 .format("Category (name = {0}) was deleted", category.getName()));
     }
@@ -59,14 +57,8 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         Category category = repository.findById(categoryId).orElseThrow(()
                 -> new NotFoundException(MessageFormat
                 .format("Category with id={0} was not found", categoryId)));
-
-        try {
-            category.setName(newCategoryDto.getName());
-            repository.save(category);
-        } catch (DataIntegrityViolationException e) {
-            throw new ConflictException("Failed to save category in adminCategoryService");
-        }
-
+        category.setName(newCategoryDto.getName());
+        repository.save(category);
         log.info(MessageFormat
                 .format("Changed name {0} to {1}", category.getId(), category.getName()));
 
