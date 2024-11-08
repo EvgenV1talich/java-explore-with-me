@@ -1,5 +1,6 @@
 package ru.yandex.service.adminapi.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +11,7 @@ import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.model.user.User;
 import ru.yandex.repository.UserRepository;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static ru.yandex.mapper.UserMapper.toUser;
@@ -33,6 +35,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
+    @Transactional
     public User postUser(NewUserRequest newUserRequest) {
         User user;
         if (newUserRequest.getEmail().length() > 254) {
@@ -43,13 +46,15 @@ public class AdminUserServiceImpl implements AdminUserService {
         } catch (DataIntegrityViolationException e) {
             throw new ConflictException("Something wrong in AdminUserServiceImpl postUser method :(");
         }
-        log.info("Added new user: " + user);
+        log.info(MessageFormat
+                .format("Added new user: {0}", user));
         return user;
     }
 
     @Override
     public void deleteUserById(int userId) {
-        log.info("User id=" + userId + " was deleted!");
+        log.info(MessageFormat
+                .format("User id={0} was deleted!", userId));
         repository.deleteById((long) userId);
     }
 }

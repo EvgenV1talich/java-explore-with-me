@@ -1,5 +1,6 @@
 package ru.yandex.service.adminapi.category;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,6 +25,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final CategoryMapper mapper;
 
     @Override
+    @Transactional
     public Category addCategory(NewCategoryDto newCategoryDto) {
         Category category;
         if (newCategoryDto.getName().length() > 50) {
@@ -42,6 +44,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategoryById(long categoryId) {
         Category category = repository.findById(categoryId).orElseThrow();
 
@@ -55,6 +58,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     @Override
+    @Transactional
     public Category updateCategoryById(long categoryId, NewCategoryDto newCategoryDto) {
         Category category = repository.findById(categoryId).orElseThrow(()
                 -> new NotFoundException("Category with id=" + categoryId + " was not found"));
