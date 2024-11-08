@@ -1,6 +1,5 @@
 package ru.yandex.service.adminapi.compilation;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import ru.yandex.model.event.Event;
 import ru.yandex.repository.CompilationRepository;
 import ru.yandex.repository.EventRepository;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +27,6 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final CompilationMapper compilationMapper;
 
     @Override
-    @Transactional
     public Compilation postCompilation(NewCompilationDto newCompilationDto) {
 
         List<Event> events = new ArrayList<>();
@@ -42,7 +39,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         Compilation compilation = compilationMapper.toCompilationFromDto(newCompilationDto, events);
 
         try {
-            log.info(MessageFormat.format("Added new compilation: {0}", compilation));
+            log.info("Added new compilation: " + compilation);
 
             return repository.save(compilation);
         } catch (ConflictException e) {
@@ -52,19 +49,16 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     }
 
     @Override
-    @Transactional
-    public void deleteCompilation(int compilationId) {
-        log.info(MessageFormat.format("Deleted compilation with id={0}", compilationId));
+    public void deleteCompilation(int compId) {
+        log.info("Удалена подборка с id=" + compId);
 
-        repository.deleteById((long) compilationId);
+        repository.deleteById((long) compId);
     }
 
     @Override
-    @Transactional
-    public Compilation updateCompilationById(int compilationId, UpdateCompilationRequest updateCompilationRequest) {
-        Compilation compilation = repository.findById((long) compilationId).orElseThrow(()
-                -> new NotFoundException(MessageFormat
-                .format("Compilation not found with id={0}", compilationId)));
+    public Compilation updateCompilationById(int compId, UpdateCompilationRequest updateCompilationRequest) {
+        Compilation compilation = repository.findById((long) compId).orElseThrow(()
+                -> new NotFoundException("Compilation not found with id=" + compId));
 
         List<Event> events = new ArrayList<>();
         Set<Long> eventsIds = updateCompilationRequest.getEvents();
@@ -85,8 +79,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
 
-        log.info(MessageFormat
-                .format("Compilation id= {0} was updated!", compilationId));
+        log.info("Compilation id= " + compId + " was updated!");
 
         return repository.save(compilation);
     }

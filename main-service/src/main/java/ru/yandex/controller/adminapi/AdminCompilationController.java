@@ -35,20 +35,20 @@ public class AdminCompilationController {
     }
 
     @DeleteMapping("/{compId}")
-    public ResponseEntity<Void> deleteCompilation(@PathVariable(value = "compId") int compilationId) {
+    public ResponseEntity<Void> deleteCompilation(@PathVariable int compId) {
 
         log.info("Received /DELETE request to AdminCompilationController...");
-        service.deleteCompilation(compilationId);
+        service.deleteCompilation(compId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{compId}")
-    public ResponseEntity<CompilationDto> updateCompilationById(@PathVariable(value = "compId") int compilationId,
+    public ResponseEntity<CompilationDto> updateCompilationById(@PathVariable int compId,
                                                                 @RequestBody @Valid UpdateCompilationRequest
                                                                         updateCompilationRequest) {
 
         log.info("Received /PATCH request to AdminCompilationController...");
-        return new ResponseEntity<>(compilationMapper.toCompilationDto(service.updateCompilationById(compilationId, updateCompilationRequest)),
+        return new ResponseEntity<>(compilationMapper.toCompilationDto(service.updateCompilationById(compId, updateCompilationRequest)),
                 HttpStatus.OK);
     }
 
