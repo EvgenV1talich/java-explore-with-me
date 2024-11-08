@@ -42,7 +42,7 @@ public class AdminCategoryController {
 
     @PatchMapping("/{catId}")
     public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(value = "catId") int categoryId,
-                                                          @RequestBody NewCategoryDto newCategoryDto) {
+                                                          @RequestBody @Valid NewCategoryDto newCategoryDto) {
         log.info("Recieved /PATCH request to AdminCategoryController...");
         return new ResponseEntity<>(mapper.toCategoryDto(service.updateCategoryById(categoryId, newCategoryDto)), HttpStatus.OK);
     }
