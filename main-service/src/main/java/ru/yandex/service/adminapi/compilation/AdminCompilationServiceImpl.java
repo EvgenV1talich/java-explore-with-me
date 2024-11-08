@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.dto.compilation.NewCompilationDto;
 import ru.yandex.dto.compilation.UpdateCompilationRequest;
-import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.mapper.CompilationMapper;
 import ru.yandex.model.compilation.Compilation;
@@ -41,15 +40,10 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
         Compilation compilation = compilationMapper.toCompilationFromDto(newCompilationDto, events);
 
-        try {
-            log.info(MessageFormat
-                    .format("Added new compilation: {0}", compilation));
+        log.info(MessageFormat
+                .format("Added new compilation: {0}", compilation));
 
-            return repository.save(compilation);
-        } catch (ConflictException e) {
-            throw new ConflictException("Something wrong when adding compilation " +
-                    "in AdminCompilationServiceImpl postCompilation method");
-        }
+        return repository.save(compilation);
 
     }
 
