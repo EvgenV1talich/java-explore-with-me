@@ -42,22 +42,22 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     @Override
-    public void deleteCategoryById(long catId) {
-        Category category = repository.findById(catId).orElseThrow();
+    public void deleteCategoryById(long categoryId) {
+        Category category = repository.findById(categoryId).orElseThrow();
 
         if (eventRepository.existsByCategory(category)) {
             throw new ConflictException("Category already exists");
         } else {
-            repository.deleteById(catId);
+            repository.deleteById(categoryId);
         }
 
         log.info("Category (name = " + category.getName() + ") was deleted");
     }
 
     @Override
-    public Category updateCategoryById(long catId, NewCategoryDto newCategoryDto) {
-        Category category = repository.findById(catId).orElseThrow(()
-                -> new NotFoundException("Category with id=" + catId + " was not found"));
+    public Category updateCategoryById(long categoryId, NewCategoryDto newCategoryDto) {
+        Category category = repository.findById(categoryId).orElseThrow(()
+                -> new NotFoundException("Category with id=" + categoryId + " was not found"));
 
         if (newCategoryDto.getName().length() > 50) {
             throw new IncorrectParameterException("Field too long (more than 50 symbols)");

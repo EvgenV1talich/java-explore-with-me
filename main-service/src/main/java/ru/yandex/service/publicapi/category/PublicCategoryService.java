@@ -8,6 +8,6 @@ public interface PublicCategoryService {
 
     List<Category> getCategories();
 
-    Category getCategoryById(Long catId);
+    Category getCategoryById(Long categoryId);
 
 }

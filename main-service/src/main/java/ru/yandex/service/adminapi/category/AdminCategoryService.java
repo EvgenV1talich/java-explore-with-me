@@ -7,7 +7,7 @@ import ru.yandex.model.category.Category;
 public interface AdminCategoryService {
     Category addCategory(NewCategoryDto newCategoryDto);
 
-    void deleteCategoryById(long catId);
+    void deleteCategoryById(long categoryId);
 
-    Category updateCategoryById(long catId, NewCategoryDto newCategoryDto);
+    Category updateCategoryById(long categoryId, NewCategoryDto newCategoryDto);
 }

@@ -22,8 +22,8 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
     }
 
     @Override
-    public Category getCategoryById(Long catId) {
-        return repository.findById(catId).orElseThrow(() -> new NotFoundException("Category (id = " + catId
+    public Category getCategoryById(Long categoryId) {
+        return repository.findById(categoryId).orElseThrow(() -> new NotFoundException("Category (id = " + categoryId
                 + ") was not found"));
     }
 }

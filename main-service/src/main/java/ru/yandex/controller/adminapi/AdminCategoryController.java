@@ -33,18 +33,18 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{catId}")
-    public ResponseEntity<Void> deleteCategoryById(@PathVariable int catId) {
+    public ResponseEntity<Void> deleteCategoryById(@PathVariable(value = "catId") int categoryId) {
 
         log.info("Recieved /DELETE request to AdminCategoryController...");
-        service.deleteCategoryById(catId);
+        service.deleteCategoryById(categoryId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{catId}")
-    public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable int catId,
+    public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(value = "catId") int categoryId,
                                                           @RequestBody NewCategoryDto newCategoryDto) {
         log.info("Recieved /PATCH request to AdminCategoryController...");
-        return new ResponseEntity<>(mapper.toCategoryDto(service.updateCategoryById(catId, newCategoryDto)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toCategoryDto(service.updateCategoryById(categoryId, newCategoryDto)), HttpStatus.OK);
     }
 
 }
