@@ -1,5 +1,6 @@
 package ru.yandex.service.adminapi.event;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,6 +13,7 @@ import ru.yandex.model.event.SearchPublicEventsArgs;
 import ru.yandex.model.event.UpdateEventAdminRequest;
 import ru.yandex.repository.EventRepository;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Slf4j
@@ -53,6 +55,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     }
 
     @Override
+    @Transactional
     public Event updateEventById(int eventId, UpdateEventAdminRequest updateEventAdminRequest) {
 
         Event event = eventRepository.findById((long) eventId).orElseThrow();
@@ -86,7 +89,8 @@ public class AdminEventServiceImpl implements AdminEventService {
                 }
             }
         }
-        log.info("Event id= " + eventId + " was updated!");
+        log.info(MessageFormat
+                .format("Event id= {0} was updated!", eventId));
 
         return eventRepository.save(event);
     }
