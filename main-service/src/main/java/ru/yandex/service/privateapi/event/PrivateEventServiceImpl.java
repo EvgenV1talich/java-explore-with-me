@@ -1,5 +1,6 @@
 package ru.yandex.service.privateapi.event;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +27,7 @@ import ru.yandex.repository.LocationRepository;
 import ru.yandex.repository.RequestRepository;
 import ru.yandex.repository.UserRepository;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,12 +49,14 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
     @Override
     public List<Event> getEventsByUser(int userId) {
-        log.info("Getting events list for User id = " + userId);
+        log.info(MessageFormat
+                .format("Getting events list for User id = {0}", userId));
 
         return eventRepository.findAllByInitiatorId(userId);
     }
 
     @Override
+    @Transactional
     public Event addEvent(int userId, NewEventDto newEventDto) {
         Event event;
 
@@ -67,10 +71,12 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         }
 
         Category category = categoryRepository.findById(Long.valueOf(newEventDto.getCategory())).orElseThrow(()
-                -> new NotFoundException("Category with id=" + newEventDto.getCategory() + " was not found"));
+                -> new NotFoundException(MessageFormat
+                .format("Category with id={0} was not found", newEventDto.getCategory())));
 
         User user = userRepository.findById((long) userId).orElseThrow(()
-                -> new NotFoundException("User with id=" + userId + " was not found"));
+                -> new NotFoundException(MessageFormat
+                .format("User with id={0} was not found", userId)));
         Location location = locationRepository.save(eventMapper.toLocation(newEventDto.getLocation()));
         try {
             event = eventRepository.save(eventMapper.toEventFromNewEventDto(newEventDto, category, user, location));
@@ -78,19 +84,23 @@ public class PrivateEventServiceImpl implements PrivateEventService {
             throw new ConflictException("Field: category. Error: must not be blank. Value: null");
         }
 
-        log.info("Added new event id = " + event.getId() + " for User id = " + userId);
+        log.info(MessageFormat
+                .format("Added new event id = {0} for User id = {1}", event.getId(), userId));
 
         return event;
     }
 
     @Override
     public Event getEventById(int userId, int eventId) {
-        log.info("Search Event id=" + eventId + " for User id=" + userId);
+        log.info(MessageFormat
+                .format("Search Event id={0} for User id={1}", eventId, userId));
 
         Event event = eventRepository.findById((long) eventId).orElseThrow(()
-                -> new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId));
+                -> new NotFoundException(MessageFormat
+                .format("Event not found with id = {0} and userId = {1}", eventId, userId)));
         if (event.getInitiator().getId() != userId) {
-            throw new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId);
+            throw new NotFoundException(MessageFormat
+                    .format("Event not found with id = {0} and userId = {1}", eventId, userId));
         }
 
         return event;
@@ -148,6 +158,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     }
 
     @Override
+    @Transactional
     public EventRequestStatusUpdateResult updateRequests(int userId, int eventId,
                                                          EventRequestStatusUpdateRequest request) {
 

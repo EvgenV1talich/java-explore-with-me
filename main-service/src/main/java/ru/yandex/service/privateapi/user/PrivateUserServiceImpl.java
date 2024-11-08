@@ -1,5 +1,6 @@
 package ru.yandex.service.privateapi.user;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import ru.yandex.repository.EventRepository;
 import ru.yandex.repository.RequestRepository;
 import ru.yandex.repository.UserRepository;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static ru.yandex.mapper.RequestMapper.toRequest;
@@ -32,37 +34,46 @@ public class PrivateUserServiceImpl implements PrivateUserService {
         List<Request> requests = repository.findAllByRequesterId(userId);
 
         if (requests.isEmpty()) {
-            throw new NotFoundException("User not found with id = " + userId);
+            throw new NotFoundException(MessageFormat
+                    .format("User not found with id = {0}", userId));
         }
 
-        log.info("Getting requests list for User id=" + userId);
+        log.info(MessageFormat
+                .format("Getting requests list for User id={0}", userId));
 
         return requests;
     }
 
     @Override
+    @Transactional
     public Request postRequestsByUserId(int userId, int eventId) {
         Request request;
 
         Event event = eventsRepository.findById((long) eventId).orElseThrow(()
-                -> new NotFoundException("Event not found with id = " + eventId));
+                -> new NotFoundException(MessageFormat
+                .format("Event not found with id = {0}", eventId)));
 
         User user = usersRepository.findById((long) userId).orElseThrow(()
-                -> new NotFoundException("User not found with id = " + userId));
+                -> new NotFoundException(MessageFormat
+                .format("User not found with id = {0}", userId)));
 
         Integer confirmedRequests = event.getConfirmedRequests();
 
         if (repository.existsByRequesterIdAndEventId(userId, eventId)) {
-            throw new ConflictException("Request with requesterId= " + userId + " and eventId=" + eventId + " already exist");
+            throw new ConflictException(MessageFormat
+                    .format("Request with requesterId= {0} and eventId={1} already exist", userId, eventId));
         }
         if (event.getInitiator().getId() == userId) {
-            throw new ConflictException("User with id=" + userId + " must not be equal to initiator");
+            throw new ConflictException(MessageFormat
+                    .format("User with id={0} must not be equal to initiator", userId));
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("Event with id=" + eventId + " is not published");
+            throw new ConflictException(MessageFormat
+                    .format("Event with id={0} is not published", eventId));
         }
         if (event.getParticipantLimit() != 0 && event.getParticipantLimit().equals(event.getConfirmedRequests())) {
-            throw new ConflictException("Event with id=" + eventId + " has reached participant limit");
+            throw new ConflictException(MessageFormat
+                    .format("Event with id={0} has reached participant limit", eventId));
         }
         if (!event.getRequestModeration()) {
             if (confirmedRequests == null) {
@@ -76,20 +87,23 @@ public class PrivateUserServiceImpl implements PrivateUserService {
         if (event.getParticipantLimit() == 0) {
             request.setStatus(EventStatus.CONFIRMED);
         }
-        log.info("Added request for User id=" + userId + " and Event id=" + eventId);
+        log.info(MessageFormat
+                .format("Added request for User id={0} and Event id={1}", userId, eventId));
 
         return repository.save(request);
     }
 
     @Override
+    @Transactional
     public Request updateRequestsByUserId(int userId, int requestId) {
         Request request = repository.findByIdAndRequesterId(requestId, userId);
 
         if (request == null) {
-            throw new ConflictException("Request with id= " + requestId + " and requesterId= "
-                    + userId + " was not found");
+            throw new ConflictException(MessageFormat
+                    .format("Request with id= {0} and requesterId= {1} was not found", requestId, userId));
         }
-        log.info("Updating Request id=" + requestId);
+        log.info(MessageFormat
+                .format("Updating Request id={0}", requestId));
 
         request.setStatus(EventStatus.CANCELED);
 
