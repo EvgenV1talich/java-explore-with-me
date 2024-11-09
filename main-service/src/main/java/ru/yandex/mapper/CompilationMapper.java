@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.yandex.dto.compilation.CompilationDto;
 import ru.yandex.dto.compilation.NewCompilationDto;
+import ru.yandex.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.model.compilation.Compilation;
 import ru.yandex.model.event.Event;
 
@@ -38,22 +39,14 @@ public class CompilationMapper {
         return compilation;
     }
 
-    public Compilation toCompilationFromUpdateRequest(Compilation request, List<Event> events) {
+    public Compilation toCompilationFromUpdateRequest(UpdateCompilationRequest request, List<Event> events) {
         if (request == null) {
             return null;
         }
         Compilation compilation = new Compilation();
-        if (!events.isEmpty()) {
-            compilation.setEvents(events);
-        }
-
-        if (request.getPinned() != null) {
-            compilation.setPinned(request.getPinned());
-        }
-
-        if (request.getTitle() != null) {
-            compilation.setTitle(request.getTitle());
-        }
+        compilation.setTitle(request.getTitle());
+        compilation.setEvents(events);
+        compilation.setPinned(request.getPinned());
         return compilation;
     }
 

@@ -57,7 +57,6 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     @Override
     @Transactional
     public Compilation updateCompilationById(int compId, UpdateCompilationRequest updateCompilationRequest) {
-
         Compilation compilation = repository.findById((long) compId).orElseThrow(()
                 -> new NotFoundException(MessageFormat
                 .format("Compilation not found with id={0}", compId)));
@@ -68,10 +67,22 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         if (updateCompilationRequest.getEvents() != null) {
             events.addAll(eventRepository.findAllByIdIn(eventsIds));
         }
-        Compilation newCompilation = compilationMapper.toCompilationFromUpdateRequest(compilation, events);
+
+        if (!events.isEmpty()) {
+            compilation.setEvents(events);
+        }
+
+        if (updateCompilationRequest.getPinned() != null) {
+            compilation.setPinned(updateCompilationRequest.getPinned());
+        }
+
+        if (updateCompilationRequest.getTitle() != null) {
+            compilation.setTitle(updateCompilationRequest.getTitle());
+        }
+
         log.info("Compilation id= {} was updated!", compId);
 
-        return repository.save(newCompilation);
+        return repository.save(compilation);
     }
 
 }
