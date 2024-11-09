@@ -102,8 +102,7 @@ public class PrivateUserServiceImpl implements PrivateUserService {
             throw new ConflictException(MessageFormat
                     .format("Request with id= {0} and requesterId= {1} was not found", requestId, userId));
         }
-        log.info(MessageFormat
-                .format("Updating Request id={0}", requestId));
+        log.info("Updating Request id={}", requestId);
 
         request.setStatus(EventStatus.CANCELED);
 
