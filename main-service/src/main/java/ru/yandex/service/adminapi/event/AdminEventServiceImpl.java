@@ -13,7 +13,6 @@ import ru.yandex.model.event.SearchPublicEventsArgs;
 import ru.yandex.model.event.UpdateEventAdminRequest;
 import ru.yandex.repository.EventRepository;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 @Slf4j
@@ -89,8 +88,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                 }
             }
         }
-        log.info(MessageFormat
-                .format("Event id= {0} was updated!", eventId));
+        log.info("Event id= {} was updated!", eventId);
 
         return eventRepository.save(event);
     }
