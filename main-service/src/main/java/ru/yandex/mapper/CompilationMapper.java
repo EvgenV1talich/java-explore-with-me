@@ -39,15 +39,26 @@ public class CompilationMapper {
         return compilation;
     }
 
-    public Compilation toCompilationFromUpdateRequest(UpdateCompilationRequest request, List<Event> events) {
+    public Compilation toCompilationFromUpdateRequest(Compilation oldCompilation, UpdateCompilationRequest request, List<Event> events) {
         if (request == null) {
             return null;
         }
-        Compilation compilation = new Compilation();
+        /*Compilation compilation = new Compilation();
         compilation.setTitle(request.getTitle());
         compilation.setEvents(events);
-        compilation.setPinned(request.getPinned());
-        return compilation;
+        compilation.setPinned(request.getPinned());*/
+        if (!events.isEmpty()) {
+            oldCompilation.setEvents(events);
+        }
+
+        if (request.getPinned() != null) {
+            oldCompilation.setPinned(request.getPinned());
+        }
+
+        if (request.getTitle() != null) {
+            oldCompilation.setTitle(request.getTitle());
+        }
+        return oldCompilation;
     }
 
 

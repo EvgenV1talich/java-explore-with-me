@@ -63,26 +63,14 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
         List<Event> events = new ArrayList<>();
         Set<Long> eventsIds = updateCompilationRequest.getEvents();
-
         if (updateCompilationRequest.getEvents() != null) {
             events.addAll(eventRepository.findAllByIdIn(eventsIds));
         }
-
-        if (!events.isEmpty()) {
-            compilation.setEvents(events);
-        }
-
-        if (updateCompilationRequest.getPinned() != null) {
-            compilation.setPinned(updateCompilationRequest.getPinned());
-        }
-
-        if (updateCompilationRequest.getTitle() != null) {
-            compilation.setTitle(updateCompilationRequest.getTitle());
-        }
+        Compilation newCompilation = compilationMapper.toCompilationFromUpdateRequest(compilation, updateCompilationRequest, events);
 
         log.info("Compilation id= {} was updated!", compId);
 
-        return repository.save(compilation);
+        return repository.save(newCompilation);
     }
 
 }
