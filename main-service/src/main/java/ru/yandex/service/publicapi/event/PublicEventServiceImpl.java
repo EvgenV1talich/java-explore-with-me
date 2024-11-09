@@ -100,8 +100,7 @@ public class PublicEventServiceImpl implements PublicEventService {
                     .format("Event with id={0} is not published", eventId));
         }
 
-        log.info(MessageFormat
-                .format("Found Event id={0}", eventId));
+        log.info("Found Event id={}", eventId);
 
         saveHit(request);
 
