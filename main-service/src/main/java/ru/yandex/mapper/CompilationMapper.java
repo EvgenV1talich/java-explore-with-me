@@ -43,10 +43,6 @@ public class CompilationMapper {
         if (request == null) {
             return null;
         }
-        /*Compilation compilation = new Compilation();
-        compilation.setTitle(request.getTitle());
-        compilation.setEvents(events);
-        compilation.setPinned(request.getPinned());*/
         if (!events.isEmpty()) {
             oldCompilation.setEvents(events);
         }

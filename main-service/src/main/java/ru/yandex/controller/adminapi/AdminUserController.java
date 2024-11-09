@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.dto.user.NewUserRequest;
 import ru.yandex.dto.user.UserDto;
-import ru.yandex.mapper.UserMapper;
 import ru.yandex.model.user.User;
 import ru.yandex.service.adminapi.user.AdminUserService;
 
@@ -34,7 +33,6 @@ import static ru.yandex.mapper.UserMapper.toUserDto;
 public class AdminUserController {
 
     private final AdminUserService service;
-    private final UserMapper mapper;
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getUsers(@RequestParam(required = false) List<Long> ids,
