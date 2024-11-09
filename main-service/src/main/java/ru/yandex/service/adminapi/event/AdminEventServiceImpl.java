@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.yandex.error.apierror.exceptions.ConflictException;
+import ru.yandex.mapper.EventMapper;
 import ru.yandex.model.event.Event;
-import ru.yandex.model.event.EventState;
-import ru.yandex.model.event.EventStateAction;
 import ru.yandex.model.event.SearchPublicEventsArgs;
 import ru.yandex.model.event.UpdateEventAdminRequest;
 import ru.yandex.repository.EventRepository;
@@ -21,6 +19,7 @@ import java.util.List;
 public class AdminEventServiceImpl implements AdminEventService {
 
     private final EventRepository eventRepository;
+    private final EventMapper mapper;
 
     @Override
     public List<Event> getEvents(SearchPublicEventsArgs searchPublicEventsArgs) {
@@ -59,38 +58,10 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         Event event = eventRepository.findById((long) eventId).orElseThrow();
 
-        if (updateEventAdminRequest.getAnnotation() != null) {
-            event.setAnnotation(updateEventAdminRequest.getAnnotation());
-        }
-        if (updateEventAdminRequest.getDescription() != null) {
-            event.setDescription(updateEventAdminRequest.getDescription());
-        }
-        if (updateEventAdminRequest.getTitle() != null) {
-            event.setTitle(updateEventAdminRequest.getTitle());
-        }
-        if (updateEventAdminRequest.getParticipantLimit() != null) {
-            event.setParticipantLimit(updateEventAdminRequest.getParticipantLimit());
-        }
-        if (updateEventAdminRequest.getPaid() != null) {
-            event.setPaid(updateEventAdminRequest.getPaid());
-        }
-        if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("Cannot publish the event because it's not in the right state: PUBLISHED");
-        } else if (event.getState().equals(EventState.CANCELED)) {
-            throw new ConflictException("Cannot publish the event because it's not in the right state: CANCELED");
-        } else {
-            if (updateEventAdminRequest.getStateAction() != null) {
-                if (updateEventAdminRequest.getStateAction().toString().equals(EventStateAction.PUBLISH_EVENT.toString())) {
-                    event.setState(EventState.PUBLISHED);
-                }
-                if (updateEventAdminRequest.getStateAction().toString().equals(EventStateAction.REJECT_EVENT.toString())) {
-                    event.setState(EventState.CANCELED);
-                }
-            }
-        }
+        Event newEvent = mapper.toEventFromAdminUpdateRequest(event, updateEventAdminRequest);
         log.info("Event id= {} was updated!", eventId);
 
-        return eventRepository.save(event);
+        return eventRepository.save(newEvent);
     }
 
 }

@@ -7,13 +7,16 @@ import ru.yandex.dto.event.EventFullDto;
 import ru.yandex.dto.event.EventShortDto;
 import ru.yandex.dto.event.LocationDto;
 import ru.yandex.dto.event.NewEventDto;
+import ru.yandex.error.apierror.exceptions.ConflictException;
 import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.model.category.Category;
 import ru.yandex.model.event.Event;
 import ru.yandex.model.event.EventState;
+import ru.yandex.model.event.EventStateAction;
 import ru.yandex.model.event.Location;
 import ru.yandex.model.event.SearchEventsArgs;
 import ru.yandex.model.event.SearchPublicEventsArgs;
+import ru.yandex.model.event.UpdateEventAdminRequest;
 import ru.yandex.model.user.User;
 
 import java.time.LocalDateTime;
@@ -106,14 +109,6 @@ public class EventMapper {
         );
     }
 
-    public LocationDto toLocation(Location location) {
-
-        return new LocationDto(
-                location.getLat(),
-                location.getLon()
-        );
-    }
-
     public SearchEventsArgs toSearchEventsArgs(LocalDateTime rangeStart, LocalDateTime rangeEnd, String text,
                                                List<Long> categories, Boolean paid, Boolean onlyAvailable,
                                                String sort, HttpServletRequest request) {
@@ -144,6 +139,40 @@ public class EventMapper {
                 rangeStart,
                 rangeEnd
         );
+    }
+
+    public Event toEventFromAdminUpdateRequest(Event oldEvent, UpdateEventAdminRequest request) {
+
+        if (request.getAnnotation() != null) {
+            oldEvent.setAnnotation(request.getAnnotation());
+        }
+        if (request.getDescription() != null) {
+            oldEvent.setDescription(request.getDescription());
+        }
+        if (request.getTitle() != null) {
+            oldEvent.setTitle(request.getTitle());
+        }
+        if (request.getParticipantLimit() != null) {
+            oldEvent.setParticipantLimit(request.getParticipantLimit());
+        }
+        if (request.getPaid() != null) {
+            oldEvent.setPaid(request.getPaid());
+        }
+        if (oldEvent.getState().equals(EventState.PUBLISHED)) {
+            throw new ConflictException("Cannot publish the event because it's not in the right state: PUBLISHED");
+        } else if (oldEvent.getState().equals(EventState.CANCELED)) {
+            throw new ConflictException("Cannot publish the event because it's not in the right state: CANCELED");
+        } else {
+            if (request.getStateAction() != null) {
+                if (request.getStateAction().toString().equals(EventStateAction.PUBLISH_EVENT.toString())) {
+                    oldEvent.setState(EventState.PUBLISHED);
+                }
+                if (request.getStateAction().toString().equals(EventStateAction.REJECT_EVENT.toString())) {
+                    oldEvent.setState(EventState.CANCELED);
+                }
+            }
+        }
+        return oldEvent;
     }
 
 }
