@@ -7,7 +7,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.yandex.dto.user.NewUserRequest;
 import ru.yandex.error.apierror.exceptions.ConflictException;
-import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.model.user.User;
 import ru.yandex.repository.UserRepository;
 
@@ -37,9 +36,6 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Transactional
     public User postUser(NewUserRequest newUserRequest) {
         User user;
-        if (newUserRequest.getEmail().length() > 254) {
-            throw new IncorrectParameterException("Field: email. Error: must not be blank. Value: null");
-        }
         try {
             user = repository.save(toUser(newUserRequest));
         } catch (DataIntegrityViolationException e) {
