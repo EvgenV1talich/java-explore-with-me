@@ -49,8 +49,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
     @Override
     public List<Event> getEventsByUser(int userId) {
-        log.info(MessageFormat
-                .format("Getting events list for User id = {0}", userId));
+        log.info("Getting events list for User id = {}", userId);
 
         return eventRepository.findAllByInitiatorId(userId);
     }
@@ -81,7 +80,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         try {
             event = eventRepository.save(eventMapper.toEventFromNewEventDto(newEventDto, category, user, location));
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException("Field: category. Error: must not be blank. Value: null");
+            throw new ConflictException(e.getCause() + "\nField: category. Error: must not be blank. Value: null");
         }
 
         log.info(MessageFormat
@@ -110,15 +109,15 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     public Event updateEventById(int userId, int eventId, UpdateEventUserRequest updateEventUserRequest) {
 
         Event event = eventRepository.findById((long) eventId).orElseThrow(()
-                -> new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId));
+                -> new NotFoundException("Event not found with id = %d and userId = %d".formatted(eventId, userId)));
         if (event.getInitiator().getId() != userId) {
-            throw new NotFoundException("Event not found with id = " + eventId + " and userId = " + userId);
+            throw new NotFoundException("Event not found with id = %d and userId = %d".formatted(eventId, userId));
         }
 
         if (updateEventUserRequest.getCategory() != null) {
             event.setCategory(categoryRepository.findById((long) updateEventUserRequest.getCategory())
-                    .orElseThrow(() -> new NotFoundException("Category with id=" + updateEventUserRequest.getCategory()
-                            + "was not found")));
+                    .orElseThrow(() -> new NotFoundException("Category with id=%d was not found"
+                            .formatted(updateEventUserRequest.getCategory()))));
         }
         if (event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Event must not be published");
@@ -127,11 +126,12 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         if (updateEventUserRequest.getStateAction() != null) {
             if (StateAction.CANCEL_REVIEW.toString().equals(updateEventUserRequest.getStateAction().toString())) {
                 event.setState(EventState.CANCELED);
-            } else if (StateAction.SEND_TO_REVIEW.toString().equals(updateEventUserRequest.getStateAction().toString())) {
+            } else if (StateAction.SEND_TO_REVIEW.toString()
+                    .equals(updateEventUserRequest.getStateAction().toString())) {
                 event.setState(EventState.PENDING);
             }
         }
-        log.info("Updating Event id=" + eventId + " for User id=" + userId);
+        log.info("Updating Event id=%d for User id=%d".formatted(eventId, userId));
 
         return event;
     }
@@ -149,10 +149,10 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         }
 
         if (requests.isEmpty()) {
-            throw new NotFoundException("Event not found with id=" + eventId + " and userId=" + userId);
+            throw new NotFoundException("Event not found with id=%d and userId=%d".formatted(eventId, userId));
         }
 
-        log.info("Getting requests list for Event id=" + eventId + " for User id=" + userId);
+        log.info("Getting requests list for Event id=%d for User id=%d".formatted(eventId, userId));
 
         return requests;
     }
@@ -162,7 +162,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     public EventRequestStatusUpdateResult updateRequests(int userId, int eventId,
                                                          EventRequestStatusUpdateRequest request) {
 
-        log.info("Updating requests for Event id=" + eventId + " for User id=" + userId);
+        log.info("Updating requests for Event id=%d for User id=%d".formatted(eventId, userId));
 
         String status = request.getStatus();
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
@@ -187,9 +187,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         }
 
         Event event = eventRepository.findById((long) eventId).orElseThrow(() ->
-                new NotFoundException("Event not found with id = " + eventId + " and userId " + userId));
+                new NotFoundException("Event not found with id = %d and userId %d".formatted(eventId, userId)));
         if (event.getInitiator().getId() != userId) {
-            throw new NotFoundException("Event not found with id = " + eventId + " and userId " + userId);
+            throw new NotFoundException("Event not found with id = %d and userId %d".formatted(eventId, userId));
         }
 
         Integer participantLimit = event.getParticipantLimit();
@@ -202,7 +202,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         int potentialParticipants = requestIds.size();
 
         if (participantLimit > 0 && participantLimit.equals(approvedRequests)) {
-            throw new ConflictException("Event with id=" + event.getId() + " has reached participant limit");
+            throw new ConflictException("Event with id=%d has reached participant limit".formatted(event.getId()));
         }
 
         if (status.equals(CONFIRMED.toString())) {
@@ -212,7 +212,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(CONFIRMED)) {
                                 r.setStatus(CONFIRMED);
                             } else {
-                                throw new ConflictException("Request with id=" + r.getId() + " has already been confirmed");
+                                throw new ConflictException("Request with id=%d has already been confirmed"
+                                        .formatted(r.getId()));
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)
@@ -225,7 +226,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(CONFIRMED)) {
                                 r.setStatus(CONFIRMED);
                             } else {
-                                throw new ConflictException("Request with id=" + r.getId() + " has already been confirmed");
+                                throw new ConflictException("Request with id=%d has already been confirmed"
+                                        .formatted(r.getId()));
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)
@@ -236,7 +238,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                             if (!r.getStatus().equals(REJECTED)) {
                                 r.setStatus(REJECTED);
                             } else {
-                                throw new ConflictException("Request with id=" + r.getId() + " has already been rejected");
+                                throw new ConflictException("Request with id=%d has already been rejected"
+                                        .formatted(r.getId()));
                             }
                         })
                         .map(RequestMapper::toParticipationRequestDto)
