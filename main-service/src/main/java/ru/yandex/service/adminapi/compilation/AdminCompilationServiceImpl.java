@@ -40,8 +40,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
 
         Compilation compilation = compilationMapper.toCompilationFromDto(newCompilationDto, events);
 
-        log.info(MessageFormat
-                .format("Added new compilation: {0}", compilation));
+        log.info("Added new compilation: {}", compilation);
 
         return repository.save(compilation);
 
@@ -50,8 +49,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     @Override
     @Transactional
     public void deleteCompilation(int compId) {
-        log.info(MessageFormat
-                .format("Deleted Compilation id={0}", compId));
+        log.info("Deleted Compilation id={}", compId);
 
         repository.deleteById((long) compId);
     }
@@ -82,8 +80,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
             compilation.setTitle(updateCompilationRequest.getTitle());
         }
 
-        log.info(MessageFormat
-                .format("Compilation id= {0} was updated!", compId));
+        log.info("Compilation id= {} was updated!", compId);
 
         return repository.save(compilation);
     }
