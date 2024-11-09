@@ -30,11 +30,10 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         try {
             category = repository.save(mapper.toCategoryFromNewCategoryDto(newCategoryDto));
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException("Failed to save category in adminCategoryService");
+            throw new ConflictException("Failed to save category in adminCategoryService:\n" + e.getCause());
         }
 
-        log.info(MessageFormat
-                .format("Added category - {0}", category.getName()));
+        log.info("Added category - {}", category.getName());
 
         return category;
     }
@@ -47,8 +46,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
             throw new ConflictException("Category already exists");
         }
         repository.deleteById(categoryId);
-        log.info(MessageFormat
-                .format("Category (name = {0}) was deleted", category.getName()));
+        log.info("Category (name = {}) was deleted", category.getName());
     }
 
     @Override
