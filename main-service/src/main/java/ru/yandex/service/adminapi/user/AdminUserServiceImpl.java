@@ -11,7 +11,6 @@ import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.model.user.User;
 import ru.yandex.repository.UserRepository;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import static ru.yandex.mapper.UserMapper.toUser;
@@ -44,18 +43,16 @@ public class AdminUserServiceImpl implements AdminUserService {
         try {
             user = repository.save(toUser(newUserRequest));
         } catch (DataIntegrityViolationException e) {
-            throw new ConflictException("Something wrong in AdminUserServiceImpl postUser method :(");
+            throw new ConflictException("Something wrong in AdminUserServiceImpl postUser method :(\n" + e.getCause());
         }
-        log.info(MessageFormat
-                .format("Added new user: {0}", user));
+        log.info("Added new user: {}", user);
         return user;
     }
 
     @Override
     @Transactional
     public void deleteUserById(int userId) {
-        log.info(MessageFormat
-                .format("User id={0} was deleted!", userId));
+        log.info("User id={} was deleted!", userId);
         repository.deleteById((long) userId);
     }
 }
