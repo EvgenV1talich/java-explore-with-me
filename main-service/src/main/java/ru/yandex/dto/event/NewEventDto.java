@@ -3,7 +3,6 @@ package ru.yandex.dto.event;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -18,15 +17,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NewEventDto {
 
-    @NotNull
-    @NotEmpty
     @NotBlank
     @Size(min = 20, max = 2000)
     private String annotation;
     @NotNull
     private Integer category;
-    @NotNull
-    @NotEmpty
     @NotBlank
     @Size(min = 20, max = 7000)
     private String description;
