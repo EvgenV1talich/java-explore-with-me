@@ -112,6 +112,11 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
                             userId,
                             commentId));
         }
+        if (!eventService.exists(Long.valueOf(eventId))) {
+            throw new NotFoundException(MessageFormat
+                    .format("Event with id {0} not found", eventId));
+        }
+
         repository.deleteById(commentId);
 
     }
