@@ -109,6 +109,18 @@ public class PublicEventServiceImpl implements PublicEventService {
         return event;
     }
 
+    @Override
+    public Event setPublishedStateToEvent(int eventId) {
+        Event event = eventsRepository.getReferenceById((long) eventId);
+        event.setState(EventState.PUBLISHED);
+        return eventsRepository.save(event);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return eventsRepository.existsById(id);
+    }
+
     @Transactional
     private void saveHit(HttpServletRequest request) {
         HitDto dto = new HitDto(

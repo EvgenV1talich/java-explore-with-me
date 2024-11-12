@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 public class CommentDto {
 
     private Integer id;
-    @NotBlank
-    private Integer author;
+    private Long author;
     @NotBlank
     @Size(min = 1, max = 1000)
     private String text;
