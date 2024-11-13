@@ -41,11 +41,7 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
         User commentAuthor = userService.getUser(userId);
         //Для отладки принудительно ставим статус события как опубликованное
         Event event = eventService.setPublishedStateToEvent(eventId);
-        Comment comment = new Comment(null,
-                commentAuthor, dto.getText(),
-                LocalDateTime.now(),
-                null,
-                event);
+        Comment comment = mapper.updateCommentDtotoComment(dto, commentAuthor, event);
         return mapper.toDto(repository.save(comment));
     }
 

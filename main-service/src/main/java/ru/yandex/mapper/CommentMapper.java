@@ -2,8 +2,12 @@ package ru.yandex.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.dto.comment.CommentDto;
+import ru.yandex.dto.comment.UpdateCommentDto;
 import ru.yandex.model.comment.Comment;
+import ru.yandex.model.event.Event;
 import ru.yandex.model.user.User;
+
+import java.time.LocalDateTime;
 
 @Component
 public class CommentMapper {
@@ -35,5 +39,17 @@ public class CommentMapper {
         comment.setEvent(dto.getEvent());
         return comment;
     }
+
+    public Comment updateCommentDtotoComment(UpdateCommentDto dto, User commentAuthor, Event event) {
+        if (dto == null) {
+            return null;
+        }
+        return new Comment(null,
+                commentAuthor, dto.getText(),
+                LocalDateTime.now(),
+                null,
+                event);
+    }
+
 
 }
