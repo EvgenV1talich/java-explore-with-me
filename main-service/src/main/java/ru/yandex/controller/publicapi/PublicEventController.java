@@ -58,7 +58,7 @@ public class PublicEventController {
     @GetMapping("/{eventId}")
     public ResponseEntity<EventFullDto> getEventById(@PathVariable int eventId, HttpServletRequest request) {
 
-        log.info("Received /GET by id request to PublicEventController...");
+        log.info("Received /GET by id request to PublicEventController: Event id = {}", eventId);
 
         return new ResponseEntity<>(mapper.toEventFullDto(service.getEventById(eventId, request)), HttpStatus.OK);
     }

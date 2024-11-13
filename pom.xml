@@ -10,6 +10,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
+
 	<name>Explore With Me</name>
 	<modules>
 		<module>main-service</module>

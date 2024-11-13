@@ -31,7 +31,7 @@ public class PrivateUserController {
     @GetMapping
     public ResponseEntity<List<ParticipationRequestDto>> getRequestsByUserId(@PathVariable int userId) {
 
-        log.info("---START GET REQUESTS BY USER ID ENDPOINT---");
+        log.info("Received /GET request to PrivateUserController:\nUser id = {}", userId);
 
         List<ParticipationRequestDto> requestsDto = new ArrayList<>();
         List<Request> requestList = service.getRequestsByUserId(userId);
@@ -47,7 +47,7 @@ public class PrivateUserController {
     public ResponseEntity<ParticipationRequestDto> postRequestsByUserId(@PathVariable int userId,
                                                                         @RequestParam int eventId) {
 
-        log.info("---START POST REQUEST ENDPOINT---");
+        log.info("Received /POST request to PrivateUserController:\nUser id = {}", userId);
 
         return new ResponseEntity<>(toParticipationRequestDto(service.postRequestsByUserId(userId, eventId)),
                 HttpStatus.CREATED);
@@ -57,7 +57,7 @@ public class PrivateUserController {
     public ResponseEntity<ParticipationRequestDto> updateRequestsByUserId(@PathVariable int userId,
                                                                           @PathVariable int requestId) {
 
-        log.info("---START UPDATE REQUEST BY USER ID ENDPOINT---");
+        log.info("Received /PATCH request to PrivateUserController:\nUser id = {}", userId);
 
         return new ResponseEntity<>(toParticipationRequestDto(service.updateRequestsByUserId(userId, requestId)),
                 HttpStatus.OK);
