@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.dto.comment.CommentDto;
 import ru.yandex.dto.comment.UpdateCommentDto;
 import ru.yandex.error.apierror.exceptions.ConflictException;
-import ru.yandex.error.apierror.exceptions.IncorrectParameterException;
 import ru.yandex.error.apierror.exceptions.NoAccessException;
 import ru.yandex.error.apierror.exceptions.NotFoundException;
 import ru.yandex.mapper.CommentMapper;
@@ -84,9 +83,9 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
                             userId,
                             eventId));
         }
-        if (newComment.getText().isBlank()) {
+        /*if (newComment.getText().isBlank()) {
             throw new IncorrectParameterException("Trying to update comment to empty!");
-        }
+        }*/
 
         if (comment.getText().equals(newComment.getText())) {
             throw new ConflictException(MessageFormat
