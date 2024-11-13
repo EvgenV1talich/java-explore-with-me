@@ -1,7 +1,6 @@
 package ru.yandex.service.publicapi.event;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,7 +120,6 @@ public class PublicEventServiceImpl implements PublicEventService {
         return eventsRepository.existsById(id);
     }
 
-    @Transactional
     private void saveHit(HttpServletRequest request) {
         HitDto dto = new HitDto(
                 null,

@@ -83,9 +83,6 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
                             userId,
                             eventId));
         }
-        /*if (newComment.getText().isBlank()) {
-            throw new IncorrectParameterException("Trying to update comment to empty!");
-        }*/
 
         if (comment.getText().equals(newComment.getText())) {
             throw new ConflictException(MessageFormat
