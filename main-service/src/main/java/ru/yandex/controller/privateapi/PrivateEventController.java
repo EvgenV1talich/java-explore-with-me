@@ -53,7 +53,8 @@ public class PrivateEventController {
     public ResponseEntity<EventFullDto> addEvent(@PathVariable int userId,
                                                  @RequestBody @Valid NewEventDto newEventDto) {
 
-        log.info("Received /POST request to PrivateEventController...");
+        log.info("Received /POST request to PrivateEventController:\n%s"
+                .formatted(newEventDto.toString()));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(service.addEvent(userId, newEventDto));
         return new ResponseEntity<>(eventFullDto, HttpStatus.CREATED);
     }
@@ -70,7 +71,8 @@ public class PrivateEventController {
                                                         @PathVariable int eventId,
                                                         @RequestBody @Valid UpdateEventUserRequest updateEventUserRequest) {
 
-        log.info("Received /UPDATE request to PrivateEventController...");
+        log.info("Received /UPDATE request to PrivateEventController:\n%s"
+                .formatted(updateEventUserRequest.toString()));
         return new ResponseEntity<>(eventMapper.toEventFullDto(service.updateEventById(userId, eventId,
                 updateEventUserRequest)), HttpStatus.OK);
     }
@@ -96,7 +98,8 @@ public class PrivateEventController {
                                                                          @RequestBody EventRequestStatusUpdateRequest
                                                                                  eventRequestStatusUpdateRequest) {
 
-        log.info("Received /PATCH-requests request to PrivateEventController...");
+        log.info("Received /PATCH-requests request to PrivateEventController:\n%s"
+                .formatted(eventRequestStatusUpdateRequest.toString()));
         return new ResponseEntity<>(service.updateRequests(userId, eventId, eventRequestStatusUpdateRequest),
                 HttpStatus.OK);
     }

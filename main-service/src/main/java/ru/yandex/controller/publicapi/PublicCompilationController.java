@@ -38,7 +38,7 @@ public class PublicCompilationController {
     @GetMapping("/{compId}")
     public ResponseEntity<CompilationDto> getCompilationById(@PathVariable int compId) {
 
-        log.info("Received /GET by id request to PublicCompilationController...");
+        log.info("Received /GET by id request to PublicCompilationController: Compilation id = {}", compId);
         return new ResponseEntity<>(mapper.toCompilationDto(service.getCompilationById(compId)), HttpStatus.OK);
     }
 

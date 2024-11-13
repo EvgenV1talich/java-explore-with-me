@@ -34,7 +34,7 @@ public class PrivateCommentController {
                                                     @RequestBody @Valid UpdateCommentDto newCommentDto,
                                                     HttpServletRequest request) {
 
-        log.info("Received /POST request to CommentController...");
+        log.info("Received /POST request to CommentController:\n" + newCommentDto.toString());
 
         return new ResponseEntity<>(service.addComment(userId, eventId, newCommentDto, request),
                 HttpStatus.CREATED);
@@ -48,7 +48,7 @@ public class PrivateCommentController {
                                                                   @RequestParam(required = false)
                                                                   Boolean sortByAuthor) {
 
-        log.info("Received /GET request to CommentController...");
+        log.info("Received /GET request to CommentController");
 
         return new ResponseEntity<>(service
                 .getCommentsByEvent(userId, eventId, sortByCreated, sortByAuthor), HttpStatus.OK);
@@ -59,7 +59,8 @@ public class PrivateCommentController {
                                                     @PathVariable Integer commentId,
                                                     @RequestBody UpdateCommentDto newCommentDto) {
 
-        log.info("Received /PATCH request to CommentController...");
+        log.info("Received /PATCH request to CommentController:\n%s"
+                .formatted(newCommentDto.toString()));
 
         return new ResponseEntity<>(service.updateComment(userId, eventId, commentId, newCommentDto),
                 HttpStatus.OK);
@@ -69,7 +70,7 @@ public class PrivateCommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long userId, @PathVariable Integer eventId,
                                               @PathVariable Integer commentId) {
 
-        log.info("Received /DELETE request to CommentController...");
+        log.info("Received /DELETE request to CommentController: commentId = {}", commentId);
 
         service.deleteComment(userId, eventId, commentId);
 

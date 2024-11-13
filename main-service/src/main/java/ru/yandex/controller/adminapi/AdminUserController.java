@@ -47,14 +47,15 @@ public class AdminUserController {
     public ResponseEntity<UserDto> postUser(@RequestBody @Valid NewUserRequest newUserRequest) {
 
 
-        log.info("Received /POST request to AdminUserController...");
+        log.info("Received /POST request to AdminUserController:\n%s"
+                .formatted(newUserRequest.toString()));
         return new ResponseEntity<>(toUserDto(service.postUser(newUserRequest)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUserById(@PathVariable int userId) {
 
-        log.info("Received /DELETE request to AdminUserController...");
+        log.info("Received /DELETE request to AdminUserController: userId = {}", userId);
         service.deleteUserById(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
