@@ -57,7 +57,7 @@ public class PrivateCommentController {
     @PatchMapping("/{eventId}/comment/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long userId, @PathVariable Integer eventId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody UpdateCommentDto newCommentDto) {
+                                                    @RequestBody @Valid UpdateCommentDto newCommentDto) {
 
         log.info("Received /PATCH request to CommentController:\n%s"
                 .formatted(newCommentDto.toString()));
