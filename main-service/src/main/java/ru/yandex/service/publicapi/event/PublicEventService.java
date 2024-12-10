@@ -12,4 +12,8 @@ public interface PublicEventService {
 
     Event getEventById(int eventId, HttpServletRequest request);
 
+    Event setPublishedStateToEvent(int eventId);
+
+    boolean exists(Long id);
+
 }

@@ -30,13 +30,13 @@ public class PublicCategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getCategories(@RequestParam(defaultValue = "0") int from,
                                                            @RequestParam(defaultValue = "10") int size) {
-        log.info("Recieved /GET request to PublicCategoryController...");
+        log.info("Received /GET request to PublicCategoryController...");
         return new ResponseEntity<>(pagedResponse(service.getCategories(), from, size), HttpStatus.OK);
     }
 
     @GetMapping("/{catId}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable(value = "catId") Long categoryId) {
-        log.info("Recieved /GET request to PublicCategoryController...");
+        log.info("Received /GET request to PublicCategoryController:\n Category id = {}", categoryId);
         return new ResponseEntity<>(mapper.toCategoryDto(service.getCategoryById(categoryId)), HttpStatus.OK);
     }
 

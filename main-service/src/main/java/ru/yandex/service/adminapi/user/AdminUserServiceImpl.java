@@ -51,4 +51,16 @@ public class AdminUserServiceImpl implements AdminUserService {
         log.info("User id={} was deleted!", userId);
         repository.deleteById((long) userId);
     }
+
+    @Override
+    public User getUser(Long userId) {
+        return repository.getReferenceById(userId);
+    }
+
+    @Override
+    public boolean exists(Long id) {
+        return repository.existsById(id);
+    }
+
+
 }

@@ -28,14 +28,15 @@ public class AdminCategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> create(@RequestBody @Valid NewCategoryDto newCategoryDto) {
-        log.info("Recieved /POST request to AdminCategoryController...");
+        log.info("Recieved /POST request to AdminCategoryController:\n%s"
+                .formatted(newCategoryDto.toString()));
         return new ResponseEntity<>(mapper.toCategoryDto(service.addCategory(newCategoryDto)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{catId}")
     public ResponseEntity<Void> deleteCategoryById(@PathVariable(value = "catId") int categoryId) {
 
-        log.info("Recieved /DELETE request to AdminCategoryController...");
+        log.info("Recieved /DELETE request to AdminCategoryController: deleting id = {}", categoryId);
         service.deleteCategoryById(categoryId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -43,7 +44,8 @@ public class AdminCategoryController {
     @PatchMapping("/{catId}")
     public ResponseEntity<CategoryDto> updateCategoryById(@PathVariable(value = "catId") int categoryId,
                                                           @RequestBody @Valid NewCategoryDto newCategoryDto) {
-        log.info("Recieved /PATCH request to AdminCategoryController...");
+        log.info("Recieved /PATCH request to AdminCategoryController:\n%s"
+                .formatted(newCategoryDto.toString()));
         return new ResponseEntity<>(mapper.toCategoryDto(service.updateCategoryById(categoryId, newCategoryDto)), HttpStatus.OK);
     }
 

@@ -13,4 +13,8 @@ public interface AdminUserService {
 
     void deleteUserById(int userId);
 
+    User getUser(Long userId);
+
+    boolean exists(Long id);
+
 }
